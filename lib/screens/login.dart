@@ -1,15 +1,17 @@
 import 'package:baztami_app_flutter/config/palette.dart';
+import 'package:baztami_app_flutter/services/authservice.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import 'nav_bottom_bar.dart';
 
-class Login extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,23 +46,14 @@ class InternationalPhoneInput extends StatefulWidget {
 
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   PhoneNumber phoneNumber = PhoneNumber();
+  String verificationId = "";
+  bool codeSent = false;
+  String smsCode = "";
 
   _handleInput(PhoneNumber value) {
     setState(() {
       phoneNumber = value;
     });
-  }
-
-  _handleLogin() {
-    if (phoneNumber.dialCode.toString().length <
-        phoneNumber.phoneNumber.toString().length) {
-      //check number in firebase
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NaVBottomBar()),
-      );
-    }
   }
 
   @override
@@ -88,6 +81,19 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               ),
             )
           ]),
+          codeSent
+              ? Padding(
+                  padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(hintText: 'Enter OTP'),
+                    onChanged: (val) {
+                      setState(() {
+                        this.smsCode = val;
+                      });
+                    },
+                  ))
+              : Container(),
           ElevatedButton(
             onPressed: () {
               _handleLogin();
@@ -112,5 +118,53 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         ],
       ),
     );
+  }
+
+  _handleLogin() {
+    if (phoneNumber.dialCode.toString().length <
+        phoneNumber.phoneNumber.toString().length) {
+      //check number in firebase
+      codeSent
+          ? AuthService().signInWithOTP(smsCode, verificationId)
+          : verifyPhone(phoneNumber);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => NaVBottomBar()),
+      // );
+    }
+  }
+
+  Future<void> verifyPhone(PhoneNumber phoneNumber) async {
+    final PhoneVerificationCompleted verified = (AuthCredential authResult) {
+      //sign in with credentiels
+      AuthService().signIn(authResult);
+    };
+
+    //this for handle the error message
+    final PhoneVerificationFailed failed = (FirebaseAuthException e) {
+      if (e.code == 'invalid-phone-number') {
+        print('The provided phone number is not valid.');
+      }
+    };
+
+    //this is triggred when the sms sent to the user
+    final PhoneCodeSent smsSent = (String verId, [int? forceResend]) async {
+      this.verificationId = verId;
+      setState(() {
+        this.codeSent = true;
+      });
+    } as PhoneCodeSent;
+
+    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verificationId) {
+      this.verificationId = verificationId;
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber.phoneNumber.toString(),
+        timeout: const Duration(seconds: 5),
+        verificationCompleted: verified,
+        verificationFailed: failed,
+        codeSent: smsSent,
+        codeAutoRetrievalTimeout: autoTimeout);
   }
 }

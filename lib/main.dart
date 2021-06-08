@@ -1,7 +1,10 @@
-import 'package:baztami_app_flutter/screens/login.dart';
+import 'package:baztami_app_flutter/services/authservice.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: AuthService().handleAuth(),
     );
   }
 }

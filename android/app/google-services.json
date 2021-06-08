@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "971035825368",
+    "project_id": "baztami-app-flutter",
+    "storage_bucket": "baztami-app-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971035825368:android:e9413650a34581a8bcb3ad",
+        "android_client_info": {
+          "package_name": "com.example.baztami_app_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971035825368-d1eproa5as1k7fpajhd8l7jfcct4dt8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhaJcxyAA4IRwDaj2Xz-89F5HrM57EiCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971035825368-d1eproa5as1k7fpajhd8l7jfcct4dt8j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
