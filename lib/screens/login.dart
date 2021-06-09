@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(child: _uildWelcomeImage()),
+              Flexible(child: _welcomeImage()),
               Flexible(child: InternationalPhoneInput()),
             ],
           ),
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Widget _uildWelcomeImage() {
+Widget _welcomeImage() {
   return Container(
     child: Image.asset("assets/images/welcome_page_illustration.png"),
   );
@@ -65,6 +65,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           Column(children: [
             Center(
               child: InternationalPhoneNumberInput(
+                countrySelectorScrollControlled: true,
+                initialValue: PhoneNumber(
+                  isoCode: "MA",
+                ),
                 hintText: "Enter votre num...",
                 onInputChanged: (PhoneNumber value) => _handleInput(value),
               ),
@@ -72,28 +76,30 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
-                "Entrer votre numero de telphone en cas de perte changement de telephone vous pourriez acceder à votre compte par votre numero de telephone",
+                "Entrer votre numero de telphone. En cas de perte ou changement de telephone vous pourriez acceder à votre compte par votre numero de telephone",
                 style: TextStyle(
                   color: Palette.grey1Color,
                   fontSize: 12,
                 ),
                 textAlign: TextAlign.center,
               ),
-            )
+            ),
+            codeSent
+                ? Padding(
+                    padding: EdgeInsets.only(left: 40.0, right: 40.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.phone,
+                      decoration:
+                          InputDecoration(hintText: 'Enter OTP : XXXXXX'),
+                      onChanged: (val) {
+                        setState(() {
+                          this.smsCode = val;
+                        });
+                      },
+                    ),
+                  )
+                : Container(),
           ]),
-          codeSent
-              ? Padding(
-                  padding: EdgeInsets.only(left: 25.0, right: 25.0),
-                  child: TextFormField(
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(hintText: 'Enter OTP'),
-                    onChanged: (val) {
-                      setState(() {
-                        this.smsCode = val;
-                      });
-                    },
-                  ))
-              : Container(),
           ElevatedButton(
             onPressed: () {
               _handleLogin();
@@ -108,7 +114,6 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             ),
             style: ElevatedButton.styleFrom(
               minimumSize: Size(MediaQuery.of(context).size.width - 60, 50),
-              side: BorderSide(width: 2.0, color: Palette.primaryLightColor),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
@@ -127,10 +132,6 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       codeSent
           ? AuthService().signInWithOTP(smsCode, verificationId)
           : verifyPhone(phoneNumber);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => NaVBottomBar()),
-      // );
     }
   }
 
@@ -143,7 +144,20 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     //this for handle the error message
     final PhoneVerificationFailed failed = (FirebaseAuthException e) {
       if (e.code == 'invalid-phone-number') {
-        print('The provided phone number is not valid.');
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'votre numero n\'est pas valide, essayez de saisir un numero valide'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       }
     };
 

@@ -24,7 +24,10 @@ class AuthService {
 
   //SignIn
   signIn(AuthCredential authCreds) {
-    FirebaseAuth.instance.signInWithCredential(authCreds);
+    FirebaseAuth.instance
+        .signInWithCredential(authCreds)
+        .then((value) => null)
+        .catchError((e) => {print("the error is : $e")});
   }
 
   signInWithOTP(smsCode, verId) {
