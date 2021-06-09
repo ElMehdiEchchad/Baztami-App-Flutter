@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Baztami',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: "BalooTammudu2",
       ),
       home: AuthService().handleAuth(),
     );

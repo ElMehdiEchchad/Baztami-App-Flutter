@@ -19,11 +19,9 @@ class _NaVBottomBarState extends State<NaVBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
-        body: _screens[state],
-        bottomNavigationBar: _bottomNavigationBar(),
-      ),
+    return Scaffold(
+      body: _screens[state],
+      bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 
