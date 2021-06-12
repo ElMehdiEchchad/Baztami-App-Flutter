@@ -16,14 +16,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        //resizeToAvoidBottomInset: false,
         backgroundColor: Palette.backgroundColor,
         body: Container(
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(child: _welcomeImage()),
-              Flexible(child: InternationalPhoneInput()),
+              Flexible(
+                flex: 2,
+                child: _welcomeImage(),
+              ),
+              Flexible(
+                flex: 3,
+                child: InternationalPhoneInput(),
+              ),
             ],
           ),
         ),
@@ -49,12 +56,15 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   String verificationId = "";
   bool codeSent = false;
   String smsCode = "";
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   _handleInput(PhoneNumber value) {
     setState(() {
       phoneNumber = value;
     });
   }
+
+  bool showLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +73,17 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Column(children: [
-            Center(
-              child: InternationalPhoneNumberInput(
-                countrySelectorScrollControlled: true,
-                initialValue: PhoneNumber(
-                  isoCode: "MA",
-                ),
-                hintText: "Enter votre num...",
-                onInputChanged: (PhoneNumber value) => _handleInput(value),
-              ),
-            ),
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding:
+                  const EdgeInsets.only(top: 2, bottom: 2, left: 10, right: 10),
               child: Text(
-                "Entrer votre numero de telphone. En cas de perte ou changement de telephone vous pourriez acceder à votre compte par votre numero de telephone",
+                codeSent
+                    ? "Veuillez saisir le code qui va vous arriver par SMS"
+                    : "Veuillez saisir votre numéro de telephone",
                 style: TextStyle(
-                  color: Palette.grey1Color,
-                  fontSize: 12,
-                ),
+                    color: Palette.primaryHeadingColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w200),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -98,66 +101,122 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                       },
                     ),
                   )
-                : Container(),
+                : Center(
+                    child: InternationalPhoneNumberInput(
+                      countrySelectorScrollControlled: true,
+                      initialValue: PhoneNumber(
+                        isoCode: "MA",
+                      ),
+                      hintText: "Enter votre num...",
+                      onInputChanged: (PhoneNumber value) =>
+                          _handleInput(value),
+                    ),
+                  ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "Entrer votre numero de telphone. En cas de perte ou changement de telephone vous pourriez acceder à votre compte par votre numero de telephone",
+                style: TextStyle(
+                  color: Palette.grey1Color,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ]),
-          ElevatedButton(
-            onPressed: () {
-              _handleLogin();
-            },
-            child: Text(
-              "GO",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Palette.backgroundColor,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(MediaQuery.of(context).size.width - 60, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              primary: Palette.primaryLightColor,
-            ),
-          ),
+          showLoading
+              ? Container(
+                  child: CircularProgressIndicator(),
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    _handleLogin();
+                  },
+                  child: Text(
+                    "GO",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Palette.backgroundColor,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width - 60, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    primary: Palette.primaryLightColor,
+                  ),
+                ),
         ],
       ),
     );
   }
 
-  _handleLogin() {
+  _handleLogin() async {
     if (phoneNumber.dialCode.toString().length <
         phoneNumber.phoneNumber.toString().length) {
+      setState(() {
+        showLoading = true;
+      });
       //check number in firebase
-      codeSent
-          ? AuthService().signInWithOTP(smsCode, verificationId)
-          : verifyPhone(phoneNumber);
-    }
+      if (codeSent) {
+        await AuthService().signInWithOTP(smsCode, verificationId)
+            //     .then((value) => null)
+            //     .catchError((e) {
+            //   setState(() {
+            //     showLoading = false;
+            //   });
+            //   showDialogMessage("Error", e.toString());
+            // })
+            ;
+      } else {
+        verifyPhone(phoneNumber);
+      }
+    } else
+      (ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('numero incorrecte'))));
+  }
+
+  void showDialogMessage(String error, String text) {
+    showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(error),
+              content: Text(text),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ));
   }
 
   Future<void> verifyPhone(PhoneNumber phoneNumber) async {
+    //when num is verified
     final PhoneVerificationCompleted verified = (AuthCredential authResult) {
       //sign in with credentiels
       AuthService().signIn(authResult);
+      setState(() {
+        showLoading = false;
+      });
     };
 
     //this for handle the error message
     final PhoneVerificationFailed failed = (FirebaseAuthException e) {
+      setState(() {
+        showLoading = false;
+      });
       if (e.code == 'invalid-phone-number') {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text(
-                'votre numero n\'est pas valide, essayez de saisir un numero valide'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
+        showDialogMessage("Erreur",
+            'votre numero n\'est pas valide, essayez de saisir un numero valide');
+      } else if (e.code == 'too-many-requests') {
+        showDialogMessage("Erreur",
+            'votre némuro est bloqué temporairement, veuillez reussir plus tard');
+      } else {
+        showDialogMessage("Erreur", e.toString());
       }
     };
 
@@ -166,6 +225,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       this.verificationId = verId;
       setState(() {
         this.codeSent = true;
+        this.showLoading = false;
       });
     } as PhoneCodeSent;
 

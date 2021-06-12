@@ -19,20 +19,30 @@ class AuthService {
 
   //Sign out
   signOut() {
-    FirebaseAuth.instance.signOut();
+    try {
+      FirebaseAuth.instance.signOut();
+    } catch (e) {}
   }
 
   //SignIn
   signIn(AuthCredential authCreds) {
-    FirebaseAuth.instance
-        .signInWithCredential(authCreds)
-        .then((value) => null)
-        .catchError((e) => {print("the error is : $e")});
+    try {
+      FirebaseAuth.instance.signInWithCredential(authCreds);
+    } catch (e) {
+      print(e);
+    }
   }
 
+//sign in when message  code arrive
   signInWithOTP(smsCode, verId) {
     AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    signIn(authCreds);
+    if (authCreds.token != null) {
+      print("shiit isnt null");
+      signIn(authCreds);
+    } else {
+      //throw "OTP is Wrong";
+      print("shiit is null");
+    }
   }
 }
