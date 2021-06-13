@@ -37,12 +37,13 @@ class AuthService {
   signInWithOTP(smsCode, verId) {
     AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    if (authCreds.token != null) {
-      print("shiit isnt null");
-      signIn(authCreds);
-    } else {
-      //throw "OTP is Wrong";
-      print("shiit is null");
-    }
+    signIn(authCreds);
+    // if (authCreds.token != null) {
+    //   print("shiit isnt null");
+    //   signIn(authCreds);
+    // } else {
+    //   //throw "OTP is Wrong";
+    //   print("shiit is null");
+    // }
   }
 }
