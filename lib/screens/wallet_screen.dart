@@ -1,6 +1,6 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
-import 'package:baztami_app_flutter/widgets/custom_list_item.dart';
+import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:baztami_app_flutter/widgets/general_balance_grid_wallet.dart';
 import 'package:flutter/material.dart';
 
@@ -62,11 +62,53 @@ class _WalletHistoryState extends State<WalletHistory> {
       //color: Colors.amber,
       child: ListView(children: <Widget>[
         CustomListItem(
-          title: "SDSDS",
-          description: "HGSDHSD",
-          icon: Icon(Icons.ac_unit),
-          amount: "34 DH",
-          color: Colors.amber,
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
+        ),
+        CustomListItem(
+          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+          icon: Icons.arrow_circle_down_rounded,
+          amount: "- 34 DH",
+          color: Colors.red,
         ),
       ]),
     );
