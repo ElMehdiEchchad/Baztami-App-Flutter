@@ -1,5 +1,6 @@
 import 'package:baztami_app_flutter/config/palette.dart';
 import 'package:baztami_app_flutter/config/styles.dart';
+import 'package:baztami_app_flutter/screens/profile_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 
@@ -118,7 +119,15 @@ class _CreditScreenState extends State<CreditScreen> {
             padding: EdgeInsets.only(right:10),
             itemCount:17 ,
               itemBuilder:(context,index){
-                 return creditcard();
+                 return GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) => ProfileScreen()),
+                       );
+                     },
+                     child: creditcard()
+                 );
                }
              )
            ),
