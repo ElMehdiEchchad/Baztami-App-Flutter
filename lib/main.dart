@@ -1,3 +1,4 @@
+import 'package:baztami_app_flutter/screens/ProfileScreen.dart';
 import 'package:baztami_app_flutter/screens/nav_bottom_bar.dart';
 import 'package:baztami_app_flutter/services/authservice.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "BalooTammudu2",
       ),
       //home: AuthService().handleAuth(),
-      home: NaVBottomBar(),
+      home: ProfileScreen(),
     );
   }
 }
