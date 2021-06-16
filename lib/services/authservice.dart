@@ -25,25 +25,25 @@ class AuthService {
   }
 
   //SignIn
-  signIn(AuthCredential authCreds) {
+  signIn(AuthCredential authCreds) async {
     try {
-      FirebaseAuth.instance.signInWithCredential(authCreds);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(authCreds);
+      return 1;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-verification-code') {
+        print('The OTP CODE IS INVALID');
+      }
     } catch (e) {
       print(e);
     }
   }
 
 //sign in when message  code arrive
-  signInWithOTP(smsCode, verId) {
+  signInWithOTP(smsCode, verId) async {
     AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
-    signIn(authCreds);
-    // if (authCreds.token != null) {
-    //   print("shiit isnt null");
-    //   signIn(authCreds);
-    // } else {
-    //   //throw "OTP is Wrong";
-    //   print("shiit is null");
-    // }
+    var i = await signIn(authCreds);
+    return i;
   }
 }

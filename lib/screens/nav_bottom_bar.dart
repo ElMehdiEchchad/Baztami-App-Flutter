@@ -27,13 +27,17 @@ class _NaVBottomBarState extends State<NaVBottomBar> {
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
-      items: [Icons.account_balance_wallet_rounded, Icons.receipt, Icons.person]
+      items: const [
+        Icons.account_balance_wallet_rounded,
+        Icons.receipt,
+        Icons.person
+      ]
           .asMap()
           .map(
             (key, value) => MapEntry(
               key,
               BottomNavigationBarItem(
-                label: "",
+                label: '',
                 icon: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 30,
@@ -56,6 +60,7 @@ class _NaVBottomBarState extends State<NaVBottomBar> {
       selectedItemColor: Palette.backgroundColor,
       unselectedItemColor: Palette.grey1Color,
       backgroundColor: Palette.backgroundColor,
+      //backgroundColor: Colors.red,
       type: BottomNavigationBarType.fixed,
       elevation: 0,
       showSelectedLabels: false,

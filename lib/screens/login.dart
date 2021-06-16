@@ -162,7 +162,14 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       });
       //check number in firebase
       if (codeSent) {
-        AuthService().signInWithOTP(smsCode, verificationId);
+        var i = AuthService().signInWithOTP(smsCode, verificationId);
+        if (i != 1) {
+          setState(() {
+            showLoading = false;
+          });
+          (ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('OTP n\'est pas valid'))));
+        }
       } else {
         verifyPhone(phoneNumber);
       }
@@ -226,11 +233,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber.phoneNumber.toString(),
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: verified,
-        verificationFailed: failed,
-        codeSent: smsSent,
-        codeAutoRetrievalTimeout: autoTimeout);
+      phoneNumber: phoneNumber.phoneNumber.toString(),
+      timeout: const Duration(seconds: 5),
+      verificationCompleted: verified,
+      verificationFailed: failed,
+      codeSent: smsSent,
+      codeAutoRetrievalTimeout: autoTimeout,
+    );
   }
 }
