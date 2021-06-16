@@ -33,11 +33,17 @@ class _CreditScreenState extends State<CreditScreen> {
            Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
              children: [
-              topcards(),
+              topcards(
+                title: "Payé",
+                sum : "+ 3789 DH"
+              ),
                SizedBox(
                  width: 20,
                ),
-               topcards()
+               topcards(
+                   title: "Reste à Payer",
+                   sum : "- 1300 DH"
+               )
              ],
            ),
 
@@ -126,7 +132,11 @@ class _CreditScreenState extends State<CreditScreen> {
                          MaterialPageRoute(builder: (context) => ClientScreen()),
                        );
                      },
-                     child: creditcard()
+                     child: creditcard(
+                       name :"SALMA CHANA" ,
+                       date :"10/01/2020",
+                       amount :"250"
+                     )
                  );
                }
              )
@@ -142,14 +152,17 @@ class _CreditScreenState extends State<CreditScreen> {
 }
 
 
-class creditcard extends StatefulWidget {
+class creditcard extends StatelessWidget{
+  const creditcard(
+      {Key? key,
+        required this.name,
+        required this.date,
+        required this.amount})
+      : super(key: key);
 
-
-  @override
-  _creditcardState createState() => _creditcardState();
-}
-
-class _creditcardState extends State<creditcard> {
+  final String name;
+  final String date;
+  final String amount;
   @override
   Widget build(BuildContext context) {
     return    Column(
@@ -168,28 +181,30 @@ class _creditcardState extends State<creditcard> {
               ),
             ),
 
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "MOHAMMED ALAMI",
-                    style: TextStyle(
-                        fontSize : 15 ,
-                        color : Colors.black,
-                        fontWeight: FontWeight.bold
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                          fontSize : 15 ,
+                          color : Colors.black,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
-                  ),
-                  Text(
-                    " 20/02/2019",
-                    style: TextStyle(
-                        fontSize : 15,
-                        color : Colors.black.withOpacity(0.5),
-                        fontWeight: FontWeight.w200
+                    Text(
+                      date,
+                      style: TextStyle(
+                          fontSize : 15,
+                          color : Colors.black.withOpacity(0.5),
+                          fontWeight: FontWeight.w200
+                      ),
                     ),
-                  ),
 
-                ],
+                  ],
+                ),
               ),
             ),
             Spacer(),
@@ -200,7 +215,7 @@ class _creditcardState extends State<creditcard> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      " 245 DH",
+                      amount,
                       style: TextStyle(
                           fontSize : 15,
                           color : Colors.red,
@@ -223,6 +238,15 @@ class _creditcardState extends State<creditcard> {
 }
 
 class topcards extends StatelessWidget {
+  const topcards(
+      {Key? key,
+        required this.title ,
+        required this.sum
+     })
+      : super(key: key);
+
+  final String title;
+  final String sum;
 
   @override
   Widget build(BuildContext context) {
@@ -244,14 +268,14 @@ class topcards extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Payé',
+              title,
               style: TextStyle(
                   color: Palette.grey2Color,
                   fontSize: 15,
                   fontWeight: FontWeight.w600),
             ),
             Text(
-              '4070 DH',
+              sum,
               style: TextStyle(
                   color: Palette.primaryLightColor,
                   fontSize: 20,
