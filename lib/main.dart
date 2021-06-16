@@ -1,3 +1,4 @@
+import 'package:baztami_app_flutter/screens/nav_bottom_bar.dart';
 import 'package:baztami_app_flutter/services/authservice.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: "BalooTammudu2",
       ),
-      home: AuthService().handleAuth(),
+      //home: AuthService().handleAuth(),
+      home: NaVBottomBar(),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:baztami_app_flutter/config/palette.dart';
 import 'package:baztami_app_flutter/config/styles.dart';
-import 'package:baztami_app_flutter/screens/profile_screen.dart';
+import 'package:baztami_app_flutter/screens/client_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 
@@ -123,7 +123,7 @@ class _CreditScreenState extends State<CreditScreen> {
                      onTap: () {
                        Navigator.push(
                          context,
-                         MaterialPageRoute(builder: (context) => ProfileScreen()),
+                         MaterialPageRoute(builder: (context) => ClientScreen()),
                        );
                      },
                      child: creditcard()
