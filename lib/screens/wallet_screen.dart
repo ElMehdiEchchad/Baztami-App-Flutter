@@ -23,7 +23,7 @@ class _WalletScreenState extends State<WalletScreen> {
           children: [
             Row(children: [
               Text(
-                "Balance Géneral :",
+                "Balance Géneral ",
                 style: Styles.headingStyle,
                 textAlign: TextAlign.start,
               ),

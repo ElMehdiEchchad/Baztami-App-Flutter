@@ -154,7 +154,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     );
   }
 
-  _handleLogin() {
+  _handleLogin() async {
     if (phoneNumber.dialCode.toString().length <
         phoneNumber.phoneNumber.toString().length) {
       setState(() {
@@ -162,8 +162,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       });
       //check number in firebase
       if (codeSent) {
-        var i = AuthService().signInWithOTP(smsCode, verificationId);
-        if (i != 1) {
+        var i = await AuthService().signInWithOTP(smsCode, verificationId);
+        if (i == 0) {
           setState(() {
             showLoading = false;
           });

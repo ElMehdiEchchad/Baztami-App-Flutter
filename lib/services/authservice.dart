@@ -25,7 +25,7 @@ class AuthService {
   }
 
   //SignIn
-  signIn(AuthCredential authCreds) async {
+  Future<int> signIn(AuthCredential authCreds) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(authCreds);
@@ -34,13 +34,15 @@ class AuthService {
       if (e.code == 'invalid-verification-code') {
         print('The OTP CODE IS INVALID');
       }
+      return 0;
     } catch (e) {
       print(e);
+      return 0;
     }
   }
 
 //sign in when message  code arrive
-  signInWithOTP(smsCode, verId) async {
+  Future<int> signInWithOTP(smsCode, verId) async {
     AuthCredential authCreds =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
     var i = await signIn(authCreds);
