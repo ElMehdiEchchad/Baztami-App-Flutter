@@ -1,8 +1,10 @@
+import 'package:baztami_app_flutter/screens/credit_screen.dart';
 import 'package:flutter/material.dart';
 import '/services/authservice.dart';
 import 'login.dart';
 import '/screens/MainScreen.dart';
 import 'package:baztami_app_flutter/config/config.dart';
+import 'nav_bottom_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -16,8 +18,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Palette.primaryDark2Color,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreditScreen()),
+            );
+          },
+        ),
         title: Padding(
-          padding: EdgeInsets.fromLTRB(5.0, 15.0, 0, 0),
+          padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
           child: Text(
             'Profil',
             style: TextStyle(
