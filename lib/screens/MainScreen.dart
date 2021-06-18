@@ -1,6 +1,6 @@
+import 'package:baztami_app_flutter/screens/wallet_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
-import '/screens/wallet_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

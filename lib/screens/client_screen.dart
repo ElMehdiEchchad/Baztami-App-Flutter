@@ -1,6 +1,7 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:flutter/material.dart';
+import 'EditClient.dart';
 
 import 'screens.dart';
 
@@ -25,7 +26,7 @@ class _ClientScreenState extends State<ClientScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
                         MaterialPageRoute(builder: (context) => CreditScreen()),
                       );
@@ -37,13 +38,16 @@ class _ClientScreenState extends State<ClientScreen> {
                     "NAME",
                     style: TextStyle(
                       color: Palette.backgroundColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EditClient()),
+                      );},
                     icon: Image.asset("assets/images/editer.png"),
                   )
                 ],
@@ -59,18 +63,18 @@ class _ClientScreenState extends State<ClientScreen> {
                         child: Text("CHHAL 3ANDO",
                             style: TextStyle(
                               color: Palette.backgroundColor,
-                              fontSize: 18,
+                              fontSize: 14,
                               fontWeight: FontWeight.w300,
                             )),
                       ),
                       SizedBox(
-                        height: 90,
+                        height: 70,
                         child: Text(
                           "-40 DH",
                           style: TextStyle(
                             color: Palette.redColor,
-                            fontSize: 56,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 42,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -83,8 +87,8 @@ class _ClientScreenState extends State<ClientScreen> {
                                     color: Palette.grey4Color,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
-                                width: 50,
-                                height: 50,
+                                width: 45,
+                                height: 45,
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () {},
@@ -96,7 +100,7 @@ class _ClientScreenState extends State<ClientScreen> {
                               "YSALEF",
                               style: TextStyle(
                                 color: Palette.backgroundColor,
-                                fontSize: 13,
+                                fontSize: 11,
                               ),
                             )
                           ]),
@@ -107,8 +111,8 @@ class _ClientScreenState extends State<ClientScreen> {
                                     color: Palette.grey4Color,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
-                                width: 50,
-                                height: 50,
+                                width: 45,
+                                height: 45,
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () {},
@@ -119,7 +123,7 @@ class _ClientScreenState extends State<ClientScreen> {
                               "YRAD",
                               style: TextStyle(
                                 color: Palette.backgroundColor,
-                                fontSize: 13,
+                                fontSize: 11,
                               ),
                             )
                           ]),
@@ -130,8 +134,8 @@ class _ClientScreenState extends State<ClientScreen> {
                                     color: Palette.grey4Color,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
-                                width: 50,
-                                height: 50,
+                                width: 45,
+                                height: 45,
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () {},
@@ -143,7 +147,7 @@ class _ClientScreenState extends State<ClientScreen> {
                               "APPEL",
                               style: TextStyle(
                                 color: Palette.backgroundColor,
-                                fontSize: 13,
+                                fontSize: 11,
                               ),
                             )
                           ]),
@@ -152,6 +156,7 @@ class _ClientScreenState extends State<ClientScreen> {
                     ],
                   )),
             ),
+            SizedBox(height: 20),
             Expanded(child: ClientHistory()),
           ],
         ),

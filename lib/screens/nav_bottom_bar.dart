@@ -9,7 +9,7 @@ class NaVBottomBar extends StatefulWidget {
 
 class _NaVBottomBarState extends State<NaVBottomBar> {
   int state = 0;
-  var _screens = [WalletScreen(), CreditScreen(), ClientScreen()];
+  var _screens = [WalletScreen(), CreditScreen(), ProfileScreen()];
 
   _onItemTapped(index) {
     setState(() {

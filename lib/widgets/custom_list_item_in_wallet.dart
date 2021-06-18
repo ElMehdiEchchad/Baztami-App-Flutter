@@ -82,7 +82,7 @@ class CustomListItem extends StatelessWidget {
                         color:
                             isDepense ? Palette.redColor : Palette.greenColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 16,
                         height: 1),
                   ),
                 ),
