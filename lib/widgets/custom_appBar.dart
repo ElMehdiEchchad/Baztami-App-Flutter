@@ -21,7 +21,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       centerTitle: false,
       title: Text("${widget.appBarTitle}",
           style: TextStyle(
-              color: Palette.primaryDark2Color,
+              color: Palette.primaryLightColor,
               fontSize: 25,
               fontWeight: FontWeight.bold)),
       actions: <Widget>[

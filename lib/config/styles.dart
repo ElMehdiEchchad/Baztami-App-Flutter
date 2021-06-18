@@ -5,6 +5,6 @@ class Styles {
   static const TextStyle headingStyle = TextStyle(
     color: Palette.primaryHeadingColor,
     fontSize: 22,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w300,
   );
 }
