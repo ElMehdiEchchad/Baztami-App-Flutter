@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 class CustomListItem extends StatelessWidget {
   const CustomListItem(
       {Key? key,
-      required this.icon,
-      required this.title,
+      required this.date,
       required this.description,
-      required this.color,
+      required this.isDepense,
       required this.amount})
       : super(key: key);
 
-  final IconData icon;
-  final String title;
+  final String date;
+  final bool isDepense;
   final String description;
-  final String amount;
-  final Color color;
+  final double amount;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +36,11 @@ class CustomListItem extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Icon(
-                  icon,
+                  isDepense
+                      ? Icons.arrow_circle_up_rounded
+                      : Icons.arrow_circle_down_rounded,
                   size: 40,
-                  color: color,
+                  color: isDepense ? Palette.redColor : Palette.greenColor,
                 ),
               ),
               Expanded(
@@ -50,9 +50,9 @@ class CustomListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      date,
                       style: TextStyle(
-                          color: Palette.primaryHeadingColor,
+                          color: Palette.primaryLightColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
                           height: 1),
@@ -75,9 +75,12 @@ class CustomListItem extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   child: Text(
-                    amount,
+                    isDepense
+                        ? "- " + amount.toString() + " DH"
+                        : "+ " + amount.toString() + " DH",
                     style: TextStyle(
-                        color: color,
+                        color:
+                            isDepense ? Palette.redColor : Palette.greenColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         height: 1),

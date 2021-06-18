@@ -81,7 +81,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                     ? "Veuillez saisir le code qui va vous arriver par SMS"
                     : "Veuillez saisir votre numéro de telephone",
                 style: TextStyle(
-                    color: Palette.primaryHeadingColor,
+                    color: Palette.primaryDarkColor,
                     fontSize: 20,
                     fontWeight: FontWeight.w200),
                 textAlign: TextAlign.center,

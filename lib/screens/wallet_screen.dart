@@ -1,4 +1,5 @@
 import 'package:baztami_app_flutter/config/config.dart';
+import 'package:baztami_app_flutter/screens/wallet_historiques_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:baztami_app_flutter/widgets/general_balance_grid_wallet.dart';
@@ -61,54 +62,31 @@ class _WalletHistoryState extends State<WalletHistory> {
     return Container(
       //color: Colors.amber,
       child: ListView(children: <Widget>[
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WalletHistoriqueScreen(
+                      date: "le 12/23/2020",
+                      description:
+                          "HGSDHSD sssssssssssssssssssssssssssssssssss",
+                      amount: 30,
+                      isDepense: true)),
+            );
+          },
+          child: CustomListItem(
+            date: "le 12/23/2020",
+            description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
+            isDepense: true,
+            amount: 35,
+          ),
         ),
         CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
+          date: "le 12/23/2020",
           description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
-        ),
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
-        ),
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
-        ),
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
-        ),
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
-        ),
-        CustomListItem(
-          title: "SDSDS sgdgsgdgs sgdfsdgsds sdgsdgs",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          icon: Icons.arrow_circle_down_rounded,
-          amount: "- 34 DH",
-          color: Colors.red,
+          isDepense: false,
+          amount: 35,
         ),
       ]),
     );
