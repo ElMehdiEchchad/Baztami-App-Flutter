@@ -1,11 +1,12 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 
 class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
   final String date;
   final bool isDepense;
   final String description;
-  final double amount;
+  final String amount;
   WalletHistoriqueScreen(
       {Key? key,
       required this.date,
@@ -15,7 +16,8 @@ class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
       : super(key: key);
 
   @override
-  _WalletHistoriqueScreenState createState() => _WalletHistoriqueScreenState();
+  _WalletHistoriqueScreenState createState() =>
+      _WalletHistoriqueScreenState(amount);
 
   @override
   // TODO: implement preferredSize
@@ -24,13 +26,14 @@ class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
 
 class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
   TextEditingController _controller = new TextEditingController();
+  late TextEditingController _amountController =
+      new TextEditingController(text: amount);
   bool _enabled = true;
-  late double amount;
+  String amount;
+  _WalletHistoriqueScreenState(this.amount);
 
   @override
   Widget build(BuildContext context) {
-    amount = widget.amount;
-    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.backgroundColor,
@@ -65,23 +68,36 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
               SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              //--------------------------------------------- Amount -------------------------
+              Column(
                 children: [
-                  Text(
-                    widget.isDepense
-                        ? "- " + widget.amount.toString() + " DH"
-                        : "+ " + widget.amount.toString() + " DH",
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: widget.isDepense
-                          ? Palette.redColor
-                          : Palette.greenColor,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.isDepense ? "- " : "+ ",
+                        style: TextStyle(
+                            color: widget.isDepense
+                                ? Palette.redColor
+                                : Palette.greenColor,
+                            fontSize: 40.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      autotextFormField(),
+                      Text(
+                        " DH",
+                        style: TextStyle(
+                            color: widget.isDepense
+                                ? Palette.redColor
+                                : Palette.greenColor,
+                            fontSize: 40.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               ),
+
               SizedBox(
                 height: 10,
               ),
@@ -166,4 +182,31 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
   }
 
   _handleSupprimer() {}
+
+  AutoSizeTextField autotextFormField() {
+    return AutoSizeTextField(
+      onChanged: (value) => {
+        this.setState(() {
+          amount = value;
+        })
+      },
+      minWidth: null,
+      enabled: _enabled,
+      fullwidth: false,
+      keyboardType: TextInputType.number,
+      controller: _amountController,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+      ),
+      style: TextStyle(
+          color: widget.isDepense ? Palette.redColor : Palette.greenColor,
+          fontSize: 40.0,
+          fontWeight: FontWeight.bold),
+      maxLines: 1,
+    );
+  }
 }

@@ -71,7 +71,7 @@ class _WalletHistoryState extends State<WalletHistory> {
                       date: "le 12/23/2020",
                       description:
                           "HGSDHSD sssssssssssssssssssssssssssssssssss",
-                      amount: 30,
+                      amount: "35",
                       isDepense: true)),
             );
           },
