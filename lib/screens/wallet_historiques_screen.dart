@@ -7,13 +7,15 @@ class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
   final bool isDepense;
   final String description;
   final String amount;
-  WalletHistoriqueScreen(
-      {Key? key,
-      required this.date,
-      required this.isDepense,
-      required this.description,
-      required this.amount})
-      : super(key: key);
+  final bool isHistorique;
+  WalletHistoriqueScreen({
+    Key? key,
+    required this.date,
+    required this.isDepense,
+    required this.description,
+    required this.amount,
+    required this.isHistorique,
+  }) : super(key: key);
 
   @override
   _WalletHistoriqueScreenState createState() =>
