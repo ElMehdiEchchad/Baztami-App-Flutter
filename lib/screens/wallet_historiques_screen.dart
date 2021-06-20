@@ -1,4 +1,5 @@
 import 'package:baztami_app_flutter/config/config.dart';
+import 'package:baztami_app_flutter/data/firestoreFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 
@@ -7,17 +8,21 @@ class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
   final bool isDepense;
   final String description;
   final String amount;
+  final bool isHistorique;
+  final String? historiqueID;
   WalletHistoriqueScreen(
       {Key? key,
       required this.date,
       required this.isDepense,
       required this.description,
-      required this.amount})
+      required this.amount,
+      required this.isHistorique,
+      this.historiqueID})
       : super(key: key);
 
   @override
   _WalletHistoriqueScreenState createState() =>
-      _WalletHistoriqueScreenState(amount);
+      _WalletHistoriqueScreenState(amount, historiqueID!);
 
   @override
   // TODO: implement preferredSize
@@ -30,7 +35,9 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
       new TextEditingController(text: amount);
   bool _enabled = true;
   String amount;
-  _WalletHistoriqueScreenState(this.amount);
+  String historiqueID;
+  _WalletHistoriqueScreenState(this.amount, this.historiqueID);
+  //var i = FirestoreFunctions().getWalletHistoryById(historiqueID);
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:flutter/material.dart';
 
@@ -82,7 +84,7 @@ class CustomListItem extends StatelessWidget {
                         color:
                             isDepense ? Palette.redColor : Palette.greenColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 16,
                         height: 1),
                   ),
                 ),

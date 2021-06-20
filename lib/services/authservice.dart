@@ -1,5 +1,7 @@
 import 'package:baztami_app_flutter/screens/login.dart';
 import 'package:baztami_app_flutter/screens/nav_bottom_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +31,8 @@ class AuthService {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(authCreds);
+      createUserCollection(
+          userCredential.user!.uid, userCredential.user!.phoneNumber);
       return 1;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
@@ -47,5 +51,13 @@ class AuthService {
         PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
     var i = await signIn(authCreds);
     return i;
+  }
+
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("Users");
+  Future createUserCollection(String uid, String? phoneNumber) async {
+    return await userCollection.doc(uid).set({
+      "phoneNumber": phoneNumber,
+    });
   }
 }

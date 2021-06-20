@@ -1,8 +1,8 @@
 import 'package:baztami_app_flutter/screens/credit_screen.dart';
 import 'package:flutter/material.dart';
-import '/services/authservice.dart';
+//import '/services/authservice.dart';
+import 'MainScreen.dart';
 import 'login.dart';
-import '/screens/MainScreen.dart';
 import 'package:baztami_app_flutter/config/config.dart';
 import 'nav_bottom_bar.dart';
 

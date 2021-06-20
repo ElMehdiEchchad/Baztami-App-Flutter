@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: "BalooTammudu2",
       ),
+      //home: NaVBottomBar(),
       home: AuthService().handleAuth(),
-      //home: ProfileScreen(),
     );
   }
 }
