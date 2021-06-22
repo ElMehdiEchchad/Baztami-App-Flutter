@@ -2,6 +2,8 @@ import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:flutter/material.dart';
 import 'EditClient.dart';
+import 'ysalef_screen.dart';
+import 'yred_screen.dart';
 
 import 'screens.dart';
 
@@ -91,7 +93,9 @@ class _ClientScreenState extends State<ClientScreen> {
                                 height: 45,
                                 child: new Center(
                                   child: new IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => YsalefScreen()),
+                                        );},
                                     icon:
                                         Image.asset("assets/images/ysalef.png"),
                                   ),
@@ -115,7 +119,11 @@ class _ClientScreenState extends State<ClientScreen> {
                                 height: 45,
                                 child: new Center(
                                   child: new IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) => YredScreen()),
+                                        );
+                                    },
                                     icon: Image.asset("assets/images/yrad.png"),
                                   ),
                                 )),
