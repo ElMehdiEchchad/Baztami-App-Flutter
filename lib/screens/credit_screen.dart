@@ -1,8 +1,10 @@
 import 'package:baztami_app_flutter/config/palette.dart';
 import 'package:baztami_app_flutter/config/styles.dart';
+import 'package:baztami_app_flutter/screens/addclient.dart';
 import 'package:baztami_app_flutter/screens/client_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
+
 
 class CreditScreen extends StatefulWidget {
   const CreditScreen({Key? key}) : super(key: key);
@@ -60,53 +62,13 @@ class _CreditScreenState extends State<CreditScreen> {
                 Spacer(),
                 FloatingActionButton.extended(
                   onPressed: () {
-                    showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            decoration: new BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: new BorderRadius.only(
-                                    topLeft: const Radius.circular(10.0),
-                                    topRight: const Radius.circular(10.0))),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: new Icon(Icons.account_balance_wallet_rounded),
-                                  title: new Text('+/-'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.account_box),
-                                  title: new Text('nom du client'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.monetization_on),
-                                  title: new Text('montant'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: new Icon(Icons.date_range),
-                                  title: new Text('date'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        });
+                    Navigator.of(context).push(new MaterialPageRoute<Null>(
+                        builder: (BuildContext context) {
+                          return AddClient();
+                        },
+                        fullscreenDialog: true,
+
+                    ));
                   },
                   backgroundColor:Palette.primaryLightColor,
                  // icon: Icon(Icons.account_circle),
