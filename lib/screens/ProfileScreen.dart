@@ -1,3 +1,5 @@
+import 'package:baztami_app_flutter/screens/MyInfo.dart';
+import 'package:baztami_app_flutter/screens/NousContacter.dart';
 import 'package:baztami_app_flutter/screens/credit_screen.dart';
 import 'package:flutter/material.dart';
 //import '/services/authservice.dart';
@@ -74,7 +76,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Palette.primaryDarkColor,
                     ),
                     trailing: Icon(Icons.arrow_right_outlined),
-                    onTap: () {},
+                    onTap: () => {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyInfo()))
+                    },
                   ),
                 ),
               ),
@@ -114,7 +119,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Palette.primaryHeadingColor,
                     ),
                     trailing: Icon(Icons.arrow_right_outlined),
-                    onTap: () {},
+                    onTap: () => {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ContactUs()))
+                    },
                   ),
                 ),
               ),
