@@ -51,9 +51,13 @@ class _AddClientState extends State<AddClient> {
               onPressed: () async{
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc().set({
                   "date": _date,
+                  "phonenumber":phoneNumber.toString(),
+                  "name":name.text,
+                  "amount":amount.text,
+                  "isSalaf":true
                  
                 });
-
+                print("hii"+phoneNumber.toString());
               },
               child: new Text('SAVE',
                   style: Theme
