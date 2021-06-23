@@ -1,28 +1,40 @@
+import 'package:baztami_app_flutter/blocs/walletTransaction_bloc/wallet_bloc.dart';
 import 'package:baztami_app_flutter/config/config.dart';
-import 'package:baztami_app_flutter/data/firestoreFunctions.dart';
+import 'package:baztami_app_flutter/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
-  final String date;
-  final bool isDepense;
-  final String description;
-  final String amount;
+  // final String date;
+  // final bool isDepense;
+  // String? description;
+  // final String amount;
+  // String? historiqueID;
+  final WalletTransaction walletTransaction;
   final bool isHistorique;
-  final String? historiqueID;
   WalletHistoriqueScreen(
       {Key? key,
-      required this.date,
-      required this.isDepense,
-      required this.description,
-      required this.amount,
+      // required this.date,
+      // required this.isDepense,
+      // this.description,
+      // required this.amount,
+      // this.historiqueID
       required this.isHistorique,
-      this.historiqueID})
+      required this.walletTransaction})
       : super(key: key);
 
   @override
-  _WalletHistoriqueScreenState createState() =>
-      _WalletHistoriqueScreenState(amount, historiqueID!);
+  _WalletHistoriqueScreenState createState() => _WalletHistoriqueScreenState(
+      // date: this.date,
+      // amount: this.amount,
+      // description: this.description,
+      // historiqueID: this.historiqueID,
+      // isDepense: this.isDepense
+      isHistorique: isHistorique,
+      walletTransaction: walletTransaction);
 
   @override
   // TODO: implement preferredSize
@@ -30,14 +42,30 @@ class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
-  TextEditingController _controller = new TextEditingController();
-  late TextEditingController _amountController =
-      new TextEditingController(text: amount);
-  bool _enabled = true;
-  String amount;
-  String historiqueID;
-  _WalletHistoriqueScreenState(this.amount, this.historiqueID);
-  //var i = FirestoreFunctions().getWalletHistoryById(historiqueID);
+  late TextEditingController _controller;
+  late TextEditingController _amountController;
+
+  final WalletTransaction walletTransaction;
+
+  late bool _enabled;
+  final bool isHistorique;
+
+  //----------------------------------
+  String? amount;
+  String? description;
+  String? date;
+  String? historiqueID;
+  bool? isDepense;
+  //----------------------------------
+
+  _WalletHistoriqueScreenState(
+      {required this.walletTransaction, required this.isHistorique}) {
+    _enabled = this.isHistorique ? false : true;
+    _controller =
+        new TextEditingController(text: this.walletTransaction.description);
+    _amountController =
+        new TextEditingController(text: this.walletTransaction.amount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +74,13 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
         backgroundColor: Palette.backgroundColor,
         centerTitle: true,
         title: Icon(
-          widget.isDepense
+          //widget.isDepense
+          walletTransaction.isDepense
               ? Icons.arrow_circle_up_rounded
               : Icons.arrow_circle_down_rounded,
-          color: widget.isDepense ? Palette.redColor : Palette.greenColor,
+          color: walletTransaction.isDepense
+              ? Palette.redColor
+              : Palette.greenColor,
           size: 30,
         ),
         leading: IconButton(
@@ -71,7 +102,13 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               //-----------------------------------------------------------------------
-              Text("${widget.date}", style: Styles.headingStyle),
+
+              Text(
+                  DateFormat("dd-MM-yyyy")
+                      .format(DateTime.fromMillisecondsSinceEpoch(
+                          walletTransaction.date.seconds * 1000))
+                      .toString(),
+                  style: Styles.headingStyle),
               SizedBox(
                 height: 10,
               ),
@@ -82,9 +119,9 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.isDepense ? "- " : "+ ",
+                        walletTransaction.isDepense ? "- " : "+ ",
                         style: TextStyle(
-                            color: widget.isDepense
+                            color: walletTransaction.isDepense
                                 ? Palette.redColor
                                 : Palette.greenColor,
                             fontSize: 40.0,
@@ -94,7 +131,7 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                       Text(
                         " DH",
                         style: TextStyle(
-                            color: widget.isDepense
+                            color: walletTransaction.isDepense
                                 ? Palette.redColor
                                 : Palette.greenColor,
                             fontSize: 40.0,
@@ -143,7 +180,14 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                             primary: Palette.primaryLightColor),
                         onPressed: () {
                           if (_enabled) {
-                            _handleSauvegarder();
+                            _handleSauvegarder(context);
+                            // BlocProvider.of<WalletBloc>(context).add(
+                            //     AddWalletTransactions(new WalletTransaction(
+                            //         amount: "30",
+                            //         date: Timestamp.fromDate(DateTime.now()),
+                            //         isDepense: true,
+                            //         description: "test tes a supprimer",
+                            //         id: 'hhhhhhhhhhhhhhhh')));
                           } else {
                             _handleModifier();
                           }
@@ -154,17 +198,20 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: StadiumBorder(),
-                            minimumSize: Size(
-                                MediaQuery.of(context).size.width - 50, 50),
-                            primary: Palette.redColor),
-                        onPressed: () {
-                          _handleSupprimer();
-                        },
-                        child: Text('Supprimer'),
-                      ),
+                      isHistorique == true
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: StadiumBorder(),
+                                  minimumSize: Size(
+                                      MediaQuery.of(context).size.width - 50,
+                                      50),
+                                  primary: Palette.redColor),
+                              onPressed: () {
+                                _handleSupprimer();
+                              },
+                              child: Text('Supprimer'),
+                            )
+                          : Container(),
                     ],
                   )
                 ],
@@ -176,10 +223,18 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     );
   }
 
-  _handleSauvegarder() {
+  _handleSauvegarder(BuildContext context) async {
     this.setState(() {
       _enabled = !_enabled;
     });
+    BlocProvider.of<WalletBloc>(context).add(isHistorique == false
+        ? AddWalletTransactions(walletTransaction.copyWith(
+            amount: amount, description: _controller.text))
+        : UpdateWalletTransactions(walletTransaction.copyWith(
+                amount: amount, description: _controller.text)
+            // )
+            ));
+    Navigator.of(context).pop();
   }
 
   _handleModifier() {
@@ -188,7 +243,11 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     });
   }
 
-  _handleSupprimer() {}
+  _handleSupprimer() {
+    BlocProvider.of<WalletBloc>(context)
+        .add(DeleteWalletTransactions(walletTransaction));
+    Navigator.of(context).pop();
+  }
 
   AutoSizeTextField autotextFormField() {
     return AutoSizeTextField(
@@ -210,7 +269,9 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
         disabledBorder: InputBorder.none,
       ),
       style: TextStyle(
-          color: widget.isDepense ? Palette.redColor : Palette.greenColor,
+          color: walletTransaction.isDepense
+              ? Palette.redColor
+              : Palette.greenColor,
           fontSize: 40.0,
           fontWeight: FontWeight.bold),
       maxLines: 1,
