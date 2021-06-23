@@ -127,11 +127,12 @@ class _YsalefScreenState extends State<YsalefScreen> {
        SizedBox(height: 60),
             ElevatedButton(onPressed: () 
               async{
-                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc("WMiIcsA7OpqEeOcxthpB").collection("Transactions").doc().set({
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc("dWi0tlHwCeFCNU5h468K").collection("Transactions").doc().set({
                   "date": _date,
                   "amount":amount.text,
                   "isSalaf":true
-                });}, 
+                });
+                print("Omayma"+amount.toString());}, 
               child: Text(
                     "VALIDER",
                     style: TextStyle(
