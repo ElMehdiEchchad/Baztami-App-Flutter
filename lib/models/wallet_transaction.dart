@@ -17,7 +17,7 @@ class WalletTransaction extends Equatable {
       required this.amount,
       required this.isDepense,
       required this.description})
-      : id = id ?? Uuid().v1();
+      : id = id;
 
   WalletTransaction copyWith(
       {String? id,
@@ -31,18 +31,6 @@ class WalletTransaction extends Equatable {
         isDepense: isDepense ?? this.isDepense,
         description: description ?? this.description);
   }
-
-  //:date:date ?? date=Timestamp.fromDate(DateTime.now());
-  // : this.description = description ?? '',
-
-  // Wallet copyWith({ String amount, String description,bool isDepense, DateTime date}) {
-  //   return Wallet(
-  //     date:date ?? this.date,
-  //    amount:amount ?? this.amount,
-  //     isDepense:isDepense ?? this.isDepense,
-  //    description:description ?? this.description,
-  //   );
-  // }
 
   @override
   String toString() {

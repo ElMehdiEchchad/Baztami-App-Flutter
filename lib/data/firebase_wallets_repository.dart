@@ -24,6 +24,10 @@ class FirebaseWalletTransactionsRepository
 
   @override
   Future<void> addNewWalletTransaction(WalletTransaction walletTransaction) {
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    print(userCollection.snapshots().toString());
+    userCollection
+        .update({"BalanceGeneral": walletTransaction.toEntity().amount});
     return walletCollection.add(walletTransaction.toEntity().toDocument());
   }
 
