@@ -1,5 +1,7 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'EditClient.dart';
 import 'ysalef_screen.dart';
@@ -18,6 +20,7 @@ class ClientScreen extends StatefulWidget {
 }
 
 class _ClientScreenState extends State<ClientScreen> {
+
   final String clientid;
   _ClientScreenState(this.clientid);
   @override
@@ -176,7 +179,7 @@ class _ClientScreenState extends State<ClientScreen> {
                   )),
             ),
             SizedBox(height: 20),
-            Expanded(child: ClientHistory()),
+            Expanded(child: ClientHistory(clientid:clientid)),
           ],
         ),
       ),
@@ -185,11 +188,21 @@ class _ClientScreenState extends State<ClientScreen> {
 }
 
 class ClientHistory extends StatefulWidget {
+  final String clientid;
+  const ClientHistory({Key,key, required this.clientid}) : super(key: key);
   @override
-  _ClientHistoryState createState() => _ClientHistoryState();
+  _ClientHistoryState createState() => _ClientHistoryState(this.clientid);
 }
 
 class _ClientHistoryState extends State<ClientHistory> {
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  final String clientid;
+  _ClientHistoryState (this.clientid);
+  void initState  () {
+    // TODO: implement initState
+    super.initState();
+    print("heyy"+clientid);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -214,60 +227,31 @@ class _ClientHistoryState extends State<ClientHistory> {
             ),
           ],
         ),
-        Expanded(child: ClientHistoryCard())
+        Expanded(child:  Container(
+          child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData)
+          return Center(child: new CircularProgressIndicator());
+          return new ListView.builder(
+          scrollDirection: Axis.vertical,
+          padding: EdgeInsets.only(right: 10),
+          itemCount:(snapshot.data!).docs.length,
+          itemBuilder: (BuildContext context, int index)
+          {
+          return  CustomListItem(
+          date: (snapshot.data!).docs[index]["date"],
+          description: "to add",
+          isDepense: (snapshot.data!).docs[index]["isSalaf"],
+          amount: double.parse((snapshot.data!).docs[index]["amount"]),
+          );
+          }
+
+          );
+
+          }
+          )))
       ]),
     );
-  }
-}
-
-class ClientHistoryCard extends StatefulWidget {
-  @override
-  _ClientHistoryCardState createState() => _ClientHistoryCardState();
-}
-
-class _ClientHistoryCardState extends State<ClientHistoryCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: ListView(
-      children: <Widget>[
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-        CustomListItem(
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          isDepense: true,
-          amount: 35,
-        ),
-      ],
-    ));
   }
 }
