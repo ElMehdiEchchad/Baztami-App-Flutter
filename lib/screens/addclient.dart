@@ -1,8 +1,10 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:numberpicker/numberpicker.dart';
-
+import 'package:baztami_app_flutter/config/palette.dart';
+import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class AddClient extends StatefulWidget {
   const AddClient({Key? key}) : super(key: key);
 
@@ -14,8 +16,11 @@ class _AddClientState extends State<AddClient> {
   PhoneNumber phoneNumber = PhoneNumber();
   List<String> _locations = ['Give','Take']; // Option 2
   String _selectedLocation ='Give'; // Option 2
-  int _currentHorizontalIntValue = 50;
-  late String _date ;
+  late String _date ='Select date ..';
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  final  userCollection = FirebaseFirestore.instance.collection("Users");
+  TextEditingController name = new TextEditingController() ;
+  TextEditingController amount = new TextEditingController() ;
 
   _handleInput(PhoneNumber value) {
     setState(() {
@@ -23,14 +28,16 @@ class _AddClientState extends State<AddClient> {
     });
   }
 
-  Future _selectDate() async {
+  Future _selectDate(BuildContext context) async {
+    print("salma"+userid);
     DateTime? picked = await showDatePicker(
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(2016),
-        lastDate: new DateTime(2019)
+        lastDate: new DateTime(2030)
     );
-    if(picked != null) setState(() => _date = picked.toString());
+    if(picked != null) setState(() => {_date = new DateFormat.yMMMMd("en_US").format(picked)
+  });
   }
 
 
@@ -41,8 +48,12 @@ class _AddClientState extends State<AddClient> {
         title: const Text('New client'),
         actions: [
           new FlatButton(
-              onPressed: () {
-                //TODO: Handle save
+              onPressed: () async{
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc().set({
+                  "date": _date,
+                 
+                });
+
               },
               child: new Text('SAVE',
                   style: Theme
@@ -56,7 +67,7 @@ class _AddClientState extends State<AddClient> {
         child: Column(
           children: [
 
-            Padding(padding: EdgeInsets.only(left: 50, right: 50, top: 50),
+            Padding(padding: EdgeInsets.only(left: 30, right: 30, top: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,6 +75,7 @@ class _AddClientState extends State<AddClient> {
                   Container(
                     height: 50,
                     child: TextFormField(
+                      controller: name,
                       decoration: InputDecoration(
                         hintText: "Client name ..",
                         border: OutlineInputBorder(
@@ -75,27 +87,30 @@ class _AddClientState extends State<AddClient> {
                   ),
                   SizedBox(height:20),
 
-                  Container(
-                    height: 50,
-                    child: InkWell(
-                      onTap: (){
-                        // Below line stops keyboard from appearing
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
 
-                        _selectDate();
-                        // Show Date Picker Here
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          child: TextFormField(
+                            controller: TextEditingController()..text = _date,
+                            decoration: InputDecoration(
+                              hintText: "Date ..",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0)),
+                              ),
+                            ),
 
-                      },
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Date ..",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(15.0)),
                           ),
                         ),
-
                       ),
-                    ),
+                      IconButton(onPressed:  () {_selectDate(context);},
+                        color: Palette.primaryLightColor,
+                        icon:const Icon(Icons.date_range),),
+                    ],
                   ),
                   SizedBox(height:30),
 
@@ -136,18 +151,20 @@ class _AddClientState extends State<AddClient> {
                      SizedBox(
                        width: 10,
                      ),
-                      NumberPicker(
-                        value: _currentHorizontalIntValue,
-                        minValue: 50,
-                        maxValue: 10000,
-                        step: 50,
-                        itemHeight: 60,
-                        axis: Axis.horizontal,
-                        onChanged: (value) =>
-                            setState(() => _currentHorizontalIntValue = value),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.black26),
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          child: TextFormField(
+                            controller: amount,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "Amount ..",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0)),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                      /* Expanded(
