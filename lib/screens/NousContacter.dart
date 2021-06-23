@@ -1,8 +1,8 @@
 import 'package:baztami_app_flutter/screens/ProfileScreen.dart';
 import 'package:baztami_app_flutter/widgets/BoxInfo.dart';
 import 'package:flutter/material.dart';
-import '/config/Palette.dart';
-import '/screens/ProfileScreen.dart';
+import 'package:baztami_app_flutter/config/config.dart';
+
 
 class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);

@@ -1,7 +1,6 @@
 import 'package:baztami_app_flutter/screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
-import '/config/Palette.dart';
-import '/screens/MyInfo.dart';
+import 'package:baztami_app_flutter/config/config.dart';
 
 class BoxInfo extends StatelessWidget {
   final String MainTitle;
