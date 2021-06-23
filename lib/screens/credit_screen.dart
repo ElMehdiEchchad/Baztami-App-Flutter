@@ -6,6 +6,7 @@ import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class CreditScreen extends StatefulWidget {
   const CreditScreen({Key? key}) : super(key: key);
@@ -125,30 +126,6 @@ class _CreditScreenState extends State<CreditScreen> {
                         }
 
                     );
-                   /* return new ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.only(right: 10),
-                        itemCount:snapshot.docs.length,
-                        itemBuilder: (BuildContext context, int index)
-                        {
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ClientScreen()),
-                                );
-                              },
-                              child: creditcard(
-                                  name:  snapshot.data?.docs[index].data()['title']
-                                  ,
-                                  date: "10/01/2020",
-                                  amount: "250"
-                              )
-                          );
-                        }
-
-                    );*/
                   }
              )
            ),
@@ -164,6 +141,7 @@ class _CreditScreenState extends State<CreditScreen> {
 
 
 class creditcard extends StatelessWidget{
+
   const creditcard(
       {Key? key,
         required this.name,
@@ -176,6 +154,7 @@ class creditcard extends StatelessWidget{
   final String amount;
   @override
   Widget build(BuildContext context) {
+    final String userid = FirebaseAuth.instance.currentUser!.uid ;
     return    Column(
       children: [
         Row(
@@ -187,7 +166,11 @@ class creditcard extends StatelessWidget{
                     shape :BoxShape.circle
                 ),
                 child: Center(
-                  child: FlutterLogo(),
+                  child: IconButton(onPressed:  () {
+                    UrlLauncher.launch("tel://0642926547");
+                  },
+                    color: Palette.primaryLightColor,
+                    icon:const Icon(Icons.call),),
                 ),
               ),
             ),
