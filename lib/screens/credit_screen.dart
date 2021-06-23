@@ -111,10 +111,11 @@ class _CreditScreenState extends State<CreditScreen> {
                         {
                           return GestureDetector(
                               onTap: () {
+                                print((snapshot.data!).docs[index].id);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ClientScreen()),
+                                      builder: (context) => ClientScreen(clientid: (snapshot.data!).docs[index].id)),
                                 );
                               },
                               child: creditcard(

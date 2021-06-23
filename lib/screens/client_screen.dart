@@ -8,14 +8,25 @@ import 'yred_screen.dart';
 import 'screens.dart';
 
 class ClientScreen extends StatefulWidget {
-  const ClientScreen({Key? key}) : super(key: key);
+
+  final String clientid;
+  const ClientScreen({Key,key, required this.clientid}) : super(key: key);
+
 
   @override
-  _ClientScreenState createState() => _ClientScreenState();
+  _ClientScreenState createState() => _ClientScreenState(this.clientid);
 }
 
 class _ClientScreenState extends State<ClientScreen> {
+  final String clientid;
+  _ClientScreenState(this.clientid);
   @override
+  void initState  () {
+    // TODO: implement initState
+    super.initState();
+    print(clientid);
+  }
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.primaryLightColor,
@@ -48,7 +59,7 @@ class _ClientScreenState extends State<ClientScreen> {
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EditClient()),
+                        MaterialPageRoute(builder: (context) => EditClient(clientid: clientid,)),
                       );},
                     icon: Image.asset("assets/images/editer.png"),
                   )
@@ -94,7 +105,7 @@ class _ClientScreenState extends State<ClientScreen> {
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () {Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => YsalefScreen()),
+                                          MaterialPageRoute(builder: (context) => YsalefScreen(clientid:clientid)),
                                         );},
                                     icon:
                                         Image.asset("assets/images/ysalef.png"),
@@ -121,7 +132,7 @@ class _ClientScreenState extends State<ClientScreen> {
                                   child: new IconButton(
                                     onPressed: () {
                                       Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => YredScreen()),
+                                          MaterialPageRoute(builder: (context) => YredScreen(clientid: clientid)),
                                         );
                                     },
                                     icon: Image.asset("assets/images/yrad.png"),

@@ -6,13 +6,16 @@ import 'package:intl/intl.dart';
 import 'client_screen.dart';
 
 class YredScreen extends StatefulWidget {
-  const YredScreen({Key? key}) : super(key: key);
+  final String clientid;
+  const YredScreen({Key, key ,required this.clientid }) : super(key: key);
 
   @override
-  _YredScreenState createState() => _YredScreenState();
+  _YredScreenState createState() => _YredScreenState(this.clientid);
 }
 
 class _YredScreenState extends State<YredScreen> {
+  final String clientid;
+  _YredScreenState(this.clientid);
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final  userCollection = FirebaseFirestore.instance.collection("Users");
   late String _date ='Select date ..';
@@ -41,7 +44,7 @@ class _YredScreenState extends State<YredScreen> {
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen()),
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid:clientid)),
                       );
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
@@ -124,7 +127,7 @@ class _YredScreenState extends State<YredScreen> {
        ),),
        SizedBox(height: 60),
             ElevatedButton(onPressed: () async{
-                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc("dWi0tlHwCeFCNU5h468K").collection("Transactions").doc().set({
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").doc().set({
                   "date": _date,
                   "amount":amount.text,
                   "isSalaf":false
@@ -149,7 +152,7 @@ class _YredScreenState extends State<YredScreen> {
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen()),
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid)),
                       );}, 
               child: Text(
                     "ANNULER",

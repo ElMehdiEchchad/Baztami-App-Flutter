@@ -4,13 +4,16 @@ import 'client_screen.dart';
 
 
 class EditClient extends StatefulWidget {
-  const EditClient({Key? key}) : super(key: key);
+  final String clientid;
+  const EditClient({Key,key , required this.clientid }) : super(key: key);
 
   @override
-  _EditClientState createState() => _EditClientState();
+  _EditClientState createState() => _EditClientState(this.clientid);
 }
 
 class _EditClientState extends State<EditClient> {
+  final String clientid;
+  _EditClientState(this.clientid);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +27,7 @@ class _EditClientState extends State<EditClient> {
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen()),
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: "23,")),
                       );
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
