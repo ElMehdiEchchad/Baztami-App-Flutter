@@ -3,8 +3,9 @@ import 'package:baztami_app_flutter/config/styles.dart';
 import 'package:baztami_app_flutter/screens/addclient.dart';
 import 'package:baztami_app_flutter/screens/client_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreditScreen extends StatefulWidget {
   const CreditScreen({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class CreditScreen extends StatefulWidget {
 }
 
 class _CreditScreenState extends State<CreditScreen> {
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,25 +84,72 @@ class _CreditScreenState extends State<CreditScreen> {
 
          Expanded(
            child: Container(
-             child: ListView.builder(
-             scrollDirection: Axis.vertical,
-            padding: EdgeInsets.only(right:10),
-            itemCount:17 ,
-              itemBuilder:(context,index){
-                 return GestureDetector(
-                     onTap: () {
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => ClientScreen()),
-                       );
-                     },
-                     child: creditcard(
-                       name :"SALMA CHANA" ,
-                       date :"10/01/2020",
-                       amount :"250"
-                     )
-                 );
-               }
+             child: StreamBuilder<QuerySnapshot>(
+                 stream: FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData)
+                      return Center(child: new CircularProgressIndicator());
+                    //if(snapshot.data.documents.length==0) return
+                    /*Stack(
+                   fit: StackFit.expand, // StackFit.expand fixes the issue
+                  children: <Widget>[
+                        Center(
+                     child: Image.asset(
+                     'assets/no_order.png',
+                       width: 300,
+                        height: 300,
+                       ),
+                         ),
+                        ],
+                         );*/
+                    return new ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        padding: EdgeInsets.only(right: 10),
+                        itemCount:(snapshot.data!).docs.length,
+                        itemBuilder: (BuildContext context, int index)
+                        {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ClientScreen()),
+                                );
+                              },
+                              child: creditcard(
+                                  name: (snapshot.data!).docs[index]["name"],
+                                  date: (snapshot.data!).docs[index]["date"],
+                                  amount: (snapshot.data!).docs[index]["amount"]
+                              )
+                          );
+                        }
+
+                    );
+                   /* return new ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        padding: EdgeInsets.only(right: 10),
+                        itemCount:snapshot.docs.length,
+                        itemBuilder: (BuildContext context, int index)
+                        {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ClientScreen()),
+                                );
+                              },
+                              child: creditcard(
+                                  name:  snapshot.data?.docs[index].data()['title']
+                                  ,
+                                  date: "10/01/2020",
+                                  amount: "250"
+                              )
+                          );
+                        }
+
+                    );*/
+                  }
              )
            ),
          )
