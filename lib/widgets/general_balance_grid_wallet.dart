@@ -1,6 +1,10 @@
 import 'package:baztami_app_flutter/config/palette.dart';
+import 'package:baztami_app_flutter/models/models.dart';
 import 'package:baztami_app_flutter/screens/wallet_historiques_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class GeneralBalanceGridWallet extends StatefulWidget {
   const GeneralBalanceGridWallet({Key? key}) : super(key: key);
@@ -172,7 +176,6 @@ class _GeneralBalanceGridWalletState extends State<GeneralBalanceGridWallet> {
               Palette.primaryDark2Color.withOpacity(0.9),
             ],
           ),
-          //color: Palette.grey1Color,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -200,32 +203,40 @@ class _GeneralBalanceGridWalletState extends State<GeneralBalanceGridWallet> {
   }
 
   _handleAddRevenu() {
+    String now = DateFormat("dd-MM-yyyy")
+        .format(DateTime.fromMillisecondsSinceEpoch(
+            DateTime.now().millisecondsSinceEpoch))
+        .toString();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => WalletHistoriqueScreen(
-          //add date of today
-          date: "le 12/23/2020",
-          description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-          amount: "00",
-          isDepense: false,
           isHistorique: false,
+          walletTransaction: new WalletTransaction(Uuid().v1(),
+              amount: "00",
+              date: Timestamp.fromDate(DateTime.now()),
+              description: "",
+              isDepense: false),
         ),
       ),
     );
   }
 
   _handleRemoveDepenses() {
+    String now = DateFormat("dd-MM-yyyy")
+        .format(DateTime.fromMillisecondsSinceEpoch(
+            DateTime.now().millisecondsSinceEpoch))
+        .toString();
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => WalletHistoriqueScreen(
-            //add date of today
-            date: "le 12/23/2020",
-            description: "HGSDHSD sssssssssssssssssssssssssssssssssss",
-            amount: "00",
-            isDepense: true,
             isHistorique: false,
+            walletTransaction: new WalletTransaction(Uuid().v1(),
+                amount: "00",
+                date: Timestamp.fromDate(DateTime.now()),
+                description: "",
+                isDepense: true),
           ),
         ));
   }

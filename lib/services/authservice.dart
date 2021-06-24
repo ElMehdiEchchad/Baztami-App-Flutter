@@ -1,9 +1,11 @@
+import 'package:baztami_app_flutter/blocs/walletTransaction_bloc/wallet_bloc.dart';
+import 'package:baztami_app_flutter/data/firebase_wallets_repository.dart';
 import 'package:baztami_app_flutter/screens/login.dart';
 import 'package:baztami_app_flutter/screens/nav_bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthService {
   //Handles Auth
@@ -32,7 +34,11 @@ class AuthService {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(authCreds);
       createUserCollection(
-          userCredential.user!.uid, userCredential.user!.phoneNumber);
+          uid: userCredential.user!.uid,
+          phoneNumber: userCredential.user!.phoneNumber,
+          balanceGeneral: "0.00",
+          depenses: "0.00",
+          revenus: "0.00");
       return 1;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
@@ -55,9 +61,17 @@ class AuthService {
 
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
-  Future createUserCollection(String uid, String? phoneNumber) async {
+  Future createUserCollection(
+      {required String uid,
+      String? phoneNumber,
+      String? balanceGeneral,
+      String? depenses,
+      String? revenus}) async {
     return await userCollection.doc(uid).set({
       "phoneNumber": phoneNumber,
+      "BalanceGeneral": balanceGeneral,
+      "Depenses": depenses,
+      "Revenus": revenus,
     });
   }
 }

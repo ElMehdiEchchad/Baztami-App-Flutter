@@ -1,8 +1,10 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-
-
+import 'package:baztami_app_flutter/config/palette.dart';
+import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class AddClient extends StatefulWidget {
   const AddClient({Key? key}) : super(key: key);
 
@@ -12,21 +14,50 @@ class AddClient extends StatefulWidget {
 
 class _AddClientState extends State<AddClient> {
   PhoneNumber phoneNumber = PhoneNumber();
+  List<String> _locations = ['Give','Take']; // Option 2
+  String _selectedLocation ='Give'; // Option 2
+  late String _date ='Select date ..';
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  final  userCollection = FirebaseFirestore.instance.collection("Users");
+  TextEditingController name = new TextEditingController() ;
+  TextEditingController amount = new TextEditingController() ;
 
   _handleInput(PhoneNumber value) {
     setState(() {
       phoneNumber = value;
     });
   }
+
+  Future _selectDate(BuildContext context) async {
+    print("salma"+userid);
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(2016),
+        lastDate: new DateTime(2030)
+    );
+    if(picked != null) setState(() => {_date = new DateFormat.yMMMMd("en_US").format(picked)
+  });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return  new Scaffold(
       appBar: new AppBar(
-        title: const Text('New entry'),
+        title: const Text('New client'),
         actions: [
           new FlatButton(
-              onPressed: () {
-                //TODO: Handle save
+              onPressed: () async{
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc().set({
+                  "date": _date,
+                  "phonenumber":phoneNumber.toString(),
+                  "name":name.text,
+                  "amount":amount.text,
+                  "isSalaf":true
+                 
+                });
+                print("hii"+phoneNumber.toString());
               },
               child: new Text('SAVE',
                   style: Theme
@@ -39,36 +70,18 @@ class _AddClientState extends State<AddClient> {
       body: Container(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 25),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50, right: 50),
-                    child: Text(
-                      "Add a client",
-                      style: TextStyle(
-                        color: Palette.primaryLightColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(left: 50, right: 50, top: 20),
+
+            Padding(padding: EdgeInsets.only(left: 30, right: 30, top: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("  NOM",
-                    style: TextStyle(color: Palette.primaryLightColor),
-                  ),
+
                   Container(
                     height: 50,
                     child: TextFormField(
-
+                      controller: name,
                       decoration: InputDecoration(
+                        hintText: "Client name ..",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                               Radius.circular(15.0)),
@@ -76,53 +89,102 @@ class _AddClientState extends State<AddClient> {
                       ),
                     ),
                   ),
+                  SizedBox(height:20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          child: TextFormField(
+                            controller: TextEditingController()..text = _date,
+                            decoration: InputDecoration(
+                              hintText: "Date ..",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0)),
+                              ),
+                            ),
+
+                          ),
+                        ),
+                      ),
+                      IconButton(onPressed:  () {_selectDate(context);},
+                        color: Palette.primaryLightColor,
+                        icon:const Icon(Icons.date_range),),
+                    ],
+                  ),
                   SizedBox(height:30),
+
                   InternationalPhoneNumberInput(
                     countrySelectorScrollControlled: true,
                     initialValue: PhoneNumber(
                       isoCode: "MA",
                     ),
-                    hintText: "Enter votre num...",
+                    hintText: "Client number ...",
                     onInputChanged: (PhoneNumber value) =>
                         _handleInput(value),
                   ),
-                  SizedBox(height:30),
-                  Text(" Type", style:
-                  TextStyle(color: Palette.primaryLightColor),
-                  ),
-
-                  Container(
-                    height: 50,
-                    child: TextFormField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(15.0))
+                  SizedBox(height:30 ,),
+                 Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                         // width :40,
+                          child: DropdownButton(
+                            hint: Text('Transaction'),
+                            // Not necessary for Option 1
+                            value: _selectedLocation,
+                            onChanged: (Value) {
+                              setState(() {
+                                _selectedLocation = Value.toString();
+                              });
+                            },
+                            items: _locations.map((location) {
+                              return DropdownMenuItem(
+                                child: new Text(location),
+                                value: location,
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
-                    ),
-                  )
+                     SizedBox(
+                       width: 10,
+                     ),
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          child: TextFormField(
+                            controller: amount,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "Amount ..",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(15.0)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                     /* Expanded(
+                        child: Container(
+                          height: 50,
+                          child: TextFormField(
+
+                          ),
+                        ),
+                      ),*/
+                    ],
+                 )
                 ],),
             ),
-            SizedBox(height: 60),
-            ElevatedButton(onPressed: () {},
-              child: Text(
-                "VALIDER",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Palette.backgroundColor,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                minimumSize:
-                Size(MediaQuery.of(context).size.width - 60, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                primary: Palette.primaryLightColor,
-              ),),
+
+
 
           ],),
       )

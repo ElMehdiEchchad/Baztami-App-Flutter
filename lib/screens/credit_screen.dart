@@ -3,8 +3,10 @@ import 'package:baztami_app_flutter/config/styles.dart';
 import 'package:baztami_app_flutter/screens/addclient.dart';
 import 'package:baztami_app_flutter/screens/client_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class CreditScreen extends StatefulWidget {
   const CreditScreen({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class CreditScreen extends StatefulWidget {
 }
 
 class _CreditScreenState extends State<CreditScreen> {
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,25 +85,49 @@ class _CreditScreenState extends State<CreditScreen> {
 
          Expanded(
            child: Container(
-             child: ListView.builder(
-             scrollDirection: Axis.vertical,
-            padding: EdgeInsets.only(right:10),
-            itemCount:17 ,
-              itemBuilder:(context,index){
-                 return GestureDetector(
-                     onTap: () {
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => ClientScreen()),
-                       );
-                     },
-                     child: creditcard(
-                       name :"SALMA CHANA" ,
-                       date :"10/01/2020",
-                       amount :"250"
-                     )
-                 );
-               }
+             child: StreamBuilder<QuerySnapshot>(
+                 stream: FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData)
+                      return Center(child: new CircularProgressIndicator());
+                    //if(snapshot.data.documents.length==0) return
+                    /*Stack(
+                   fit: StackFit.expand, // StackFit.expand fixes the issue
+                  children: <Widget>[
+                        Center(
+                     child: Image.asset(
+                     'assets/no_order.png',
+                       width: 300,
+                        height: 300,
+                       ),
+                         ),
+                        ],
+                         );*/
+                    return new ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        padding: EdgeInsets.only(right: 10),
+                        itemCount:(snapshot.data!).docs.length,
+                        itemBuilder: (BuildContext context, int index)
+                        {
+                          return GestureDetector(
+                              onTap: () {
+                                print((snapshot.data!).docs[index].id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ClientScreen(clientid: (snapshot.data!).docs[index].id)),
+                                );
+                              },
+                              child: creditcard(
+                                  name: (snapshot.data!).docs[index]["name"],
+                                  date: (snapshot.data!).docs[index]["date"],
+                                  amount: (snapshot.data!).docs[index]["amount"]
+                              )
+                          );
+                        }
+
+                    );
+                  }
              )
            ),
          )
@@ -115,6 +142,7 @@ class _CreditScreenState extends State<CreditScreen> {
 
 
 class creditcard extends StatelessWidget{
+
   const creditcard(
       {Key? key,
         required this.name,
@@ -127,6 +155,7 @@ class creditcard extends StatelessWidget{
   final String amount;
   @override
   Widget build(BuildContext context) {
+    final String userid = FirebaseAuth.instance.currentUser!.uid ;
     return    Column(
       children: [
         Row(
@@ -138,7 +167,11 @@ class creditcard extends StatelessWidget{
                     shape :BoxShape.circle
                 ),
                 child: Center(
-                  child: FlutterLogo(),
+                  child: IconButton(onPressed:  () {
+                    UrlLauncher.launch("tel://0642926547");
+                  },
+                    color: Palette.primaryLightColor,
+                    icon:const Icon(Icons.call),),
                 ),
               ),
             ),
