@@ -21,8 +21,6 @@ class _YredScreenState extends State<YredScreen> {
   late String _date ='Select date ..';
   TextEditingController amount = new TextEditingController() ;
 
-
-
   Future _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
@@ -33,6 +31,8 @@ class _YredScreenState extends State<YredScreen> {
     if(picked != null) setState(() => {_date = new DateFormat.yMMMMd("en_US").format(picked)
   });
   }
+
+
 
 
 
@@ -152,6 +152,28 @@ class _YredScreenState extends State<YredScreen> {
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
                   "amount":total.toString(),
                 });
+
+                int entree =0;
+                int sortie =0;
+
+                  QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Clients').get();
+                  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+                  setState(() {
+                    for (var client in allData) {
+                      if((client as Map)["isSalaf"] ==true) sortie+=int.parse((client as Map)["amount"]) ;
+                      else entree+=int.parse((client as Map)["amount"]) ;
+
+                    }
+                  });
+
+                  await FirebaseFirestore.instance.collection("Users").doc(userid).update({
+                    "entrée":entree,
+                    "sortie" :sortie
+                  });
+
+
+
+
 
                 print("Omayma"+amount.toString());},
               child: Text(

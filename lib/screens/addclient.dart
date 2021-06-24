@@ -58,12 +58,23 @@ class _AddClientState extends State<AddClient> {
                   "amount":amount.text,
                   "isSalaf":isSalaf
                 });
-                DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).get();
+                int entree =0;
+                int sortie =0;
 
-                /*await FirebaseFirestore.instance.collection('Users').doc(userid).update({
-                  "entrée":entr,
-                  "sortie" :
-                });*/
+                QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Clients').get();
+                final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+                setState(() {
+                  for (var client in allData) {
+                    if((client as Map)["isSalaf"] ==true) sortie+=int.parse((client as Map)["amount"]) ;
+                    else entree+=int.parse((client as Map)["amount"]) ;
+
+                  }
+                });
+
+                await FirebaseFirestore.instance.collection("Users").doc(userid).update({
+                  "entrée":entree,
+                  "sortie" :sortie
+                });
 
                 Navigator.pop(context);
               },

@@ -22,24 +22,14 @@ class _CreditScreenState extends State<CreditScreen> {
   int sortie =0;
 
   void getdata() async {
+
     DocumentSnapshot variable = await FirebaseFirestore.instance.collection(
         "Users").doc(userid).get();
-
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Clients').get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    print(allData);
     setState(() {
-      for (var client in allData) {
-        if((client as Map)["isSalaf"] ==true) sortie+=int.parse((client as Map)["amount"]) ;
-        else entree+=int.parse((client as Map)["amount"]) ;
-
-      }
+      entree=variable["entrée"];
+      sortie=variable["sortie"];
     });
 
-   /*await FirebaseFirestore.instance.collection("Users").doc(userid).update({
-      "entrée":entree,
-     "sortie" :sortie
-    });*/
 
   }
   @override
@@ -66,20 +56,34 @@ class _CreditScreenState extends State<CreditScreen> {
             SizedBox(
               height: 5,
             ),
-           Row(
+         Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
              children: [
-              topcards(
-                title: "Entrée",
-                sum : entree.toString()+ " DH"
+              StreamBuilder(
+               stream: FirebaseFirestore.instance.collection("Users").doc(userid).snapshots(),
+               builder: (BuildContext context,
+                AsyncSnapshot snapshot) {
+                 if (!snapshot.hasData) return Center(child: new CircularProgressIndicator());
+                 return topcards(
+                     title: "Entrée",
+                     sum: "+" + (snapshot.data!)["entrée"].toString()+ " DH"
+                 );
+               }
               ),
                SizedBox(
                  width: 20,
                ),
-               topcards(
-                   title: "Sortie",
-                   sum :sortie.toString() + " DH"
-               )
+               StreamBuilder(
+                   stream: FirebaseFirestore.instance.collection("Users").doc(userid).snapshots(),
+                   builder: (BuildContext context,
+                       AsyncSnapshot snapshot) {
+                     if (!snapshot.hasData) return Center(child: new CircularProgressIndicator());
+                     return topcards(
+                         title: "Sortie",
+                         sum: "+" + (snapshot.data!)["sortie"].toString()+ " DH"
+                     );
+                   }
+               ),
              ],
            ),
 

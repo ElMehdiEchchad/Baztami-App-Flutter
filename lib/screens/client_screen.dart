@@ -24,12 +24,8 @@ class _ClientScreenState extends State<ClientScreen> {
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
   _ClientScreenState(this.clientid);
-  @override
-  void initState  () {
-    // TODO: implement initState
-    super.initState();
-    print(clientid);
-  }
+
+
     @override
   Widget build(BuildContext context) {
     return Scaffold(
