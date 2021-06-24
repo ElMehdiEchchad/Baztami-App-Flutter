@@ -193,6 +193,8 @@ class _ConfigurationState extends State<Configuration> {
                       "Supprimer mon compte",
                     )),
               ),
+
+              //All of what's below is for test purposes
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

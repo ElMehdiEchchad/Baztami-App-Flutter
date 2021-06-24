@@ -2,6 +2,7 @@ import 'package:baztami_app_flutter/screens/ProfileScreen.dart';
 import 'package:baztami_app_flutter/widgets/BoxInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:baztami_app_flutter/config/config.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _ContactUsState extends State<ContactUs> {
                     "Appelez nous!",
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
-                  onTap: () => {},
+                  onTap: () => {launch("tel:+212707102960")},
                 )),
             Container(
                 margin: EdgeInsets.all(4.0),
@@ -78,7 +79,7 @@ class _ContactUsState extends State<ContactUs> {
                       style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: Text(
-                      "myPhoneNumber",
+                      "Our Website",
                       style: TextStyle(color: Colors.white, fontSize: 18.0),
                     ),
                     onTap: () => {})),
@@ -104,7 +105,7 @@ class _ContactUsState extends State<ContactUs> {
                       "Facebook",
                       style: TextStyle(color: Colors.white, fontSize: 18.0),
                     ),
-                    onTap: () => {})),
+                    onTap: () => {_launchFacebook()})),
             Container(
                 margin: EdgeInsets.all(4.0),
                 padding: EdgeInsets.all(5.0),
@@ -127,11 +128,33 @@ class _ContactUsState extends State<ContactUs> {
                     "Contactez nous par mail",
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
-                  onTap: () => {},
+                  onTap: () => {_launchEmail()},
                 )),
           ],
         ),
       ),
     );
+  }
+}
+
+_launchFacebook() async {
+  const url = "facebook.com";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+void _launchEmail() async {
+  final Uri params = Uri(
+    scheme: 'mailto',
+    path: 'elmehdiechchad@gmail.com',
+  );
+  String url = params.toString();
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('Could not launch $url');
   }
 }
