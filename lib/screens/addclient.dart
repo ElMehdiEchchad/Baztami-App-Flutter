@@ -16,7 +16,8 @@ class _AddClientState extends State<AddClient> {
   PhoneNumber phoneNumber = PhoneNumber();
   List<String> _locations = ['Give','Take']; // Option 2
   String _selectedLocation ='Give'; // Option 2
-  late String _date ='Select date ..';
+  late String _date =new DateFormat.yMMMMd("en_US").format(new DateTime.now());
+  bool isSalaf =true;
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final  userCollection = FirebaseFirestore.instance.collection("Users");
   TextEditingController name = new TextEditingController() ;
@@ -49,15 +50,22 @@ class _AddClientState extends State<AddClient> {
         actions: [
           new FlatButton(
               onPressed: () async{
+                if(_selectedLocation !="Give") isSalaf =false ;
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc().set({
                   "date": _date,
                   "phonenumber":phoneNumber.toString(),
                   "name":name.text,
                   "amount":amount.text,
-                  "isSalaf":true
-                 
+                  "isSalaf":isSalaf
                 });
-                print("hii"+phoneNumber.toString());
+                DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).get();
+
+                /*await FirebaseFirestore.instance.collection('Users').doc(userid).update({
+                  "entrée":entr,
+                  "sortie" :
+                });*/
+
+                Navigator.pop(context);
               },
               child: new Text('SAVE',
                   style: Theme
@@ -100,6 +108,7 @@ class _AddClientState extends State<AddClient> {
                           height: 50,
                           child: TextFormField(
                             controller: TextEditingController()..text = _date,
+                            enabled: false,
                             decoration: InputDecoration(
                               hintText: "Date ..",
                               border: OutlineInputBorder(

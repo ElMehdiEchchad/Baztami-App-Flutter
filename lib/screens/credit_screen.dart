@@ -1,6 +1,7 @@
 import 'package:baztami_app_flutter/config/palette.dart';
 import 'package:baztami_app_flutter/config/styles.dart';
 import 'package:baztami_app_flutter/screens/addclient.dart';
+import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:baztami_app_flutter/screens/client_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,36 @@ class CreditScreen extends StatefulWidget {
 
 class _CreditScreenState extends State<CreditScreen> {
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  int entree =0;
+  int sortie =0;
+
+  void getdata() async {
+    DocumentSnapshot variable = await FirebaseFirestore.instance.collection(
+        "Users").doc(userid).get();
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Clients').get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print(allData);
+    setState(() {
+      for (var client in allData) {
+        if((client as Map)["isSalaf"] ==true) sortie+=int.parse((client as Map)["amount"]) ;
+        else entree+=int.parse((client as Map)["amount"]) ;
+
+      }
+    });
+
+   /*await FirebaseFirestore.instance.collection("Users").doc(userid).update({
+      "entrée":entree,
+     "sortie" :sortie
+    });*/
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getdata();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +70,15 @@ class _CreditScreenState extends State<CreditScreen> {
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
              children: [
               topcards(
-                title: "Payé",
-                sum : "+ 3789 DH"
+                title: "Entrée",
+                sum : entree.toString()+ " DH"
               ),
                SizedBox(
                  width: 20,
                ),
                topcards(
-                   title: "Reste à Payer",
-                   sum : "- 1300 DH"
+                   title: "Sortie",
+                   sum :sortie.toString() + " DH"
                )
              ],
            ),
@@ -111,17 +142,17 @@ class _CreditScreenState extends State<CreditScreen> {
                         {
                           return GestureDetector(
                               onTap: () {
-                                print((snapshot.data!).docs[index].id);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ClientScreen(clientid: (snapshot.data!).docs[index].id)),
                                 );
                               },
-                              child: creditcard(
-                                  name: (snapshot.data!).docs[index]["name"],
-                                  date: (snapshot.data!).docs[index]["date"],
-                                  amount: (snapshot.data!).docs[index]["amount"]
+                              child: CustomListItem(
+                                  date: (snapshot.data!).docs[index]["name"],
+                                  description: (snapshot.data!).docs[index]["date"],
+                                  isDepense: (snapshot.data!).docs[index]["isSalaf"],
+                                  amount: double.parse((snapshot.data!).docs[index]["amount"])
                               )
                           );
                         }
