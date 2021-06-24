@@ -4,7 +4,6 @@ import 'package:baztami_app_flutter/screens/screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:baztami_app_flutter/data/firestoreFunctions.dart';
 
 class MyInfo extends StatefulWidget {
   const MyInfo({
@@ -23,8 +22,9 @@ class _MyInfoState extends State<MyInfo> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () => {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()))
+            /*Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()))*/
+            Navigator.pop(context)
           },
           icon: Icon(Icons.arrow_back),
           color: Palette.primaryDark2Color,

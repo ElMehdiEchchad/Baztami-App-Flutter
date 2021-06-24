@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm your action.'),
+          title: Text('Confirmez votre action.'),
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[

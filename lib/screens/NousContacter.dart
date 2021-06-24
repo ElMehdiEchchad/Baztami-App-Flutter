@@ -3,7 +3,6 @@ import 'package:baztami_app_flutter/widgets/BoxInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:baztami_app_flutter/config/config.dart';
 
-
 class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);
 
@@ -19,8 +18,9 @@ class _ContactUsState extends State<ContactUs> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () => {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()))
+            /*Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()))*/
+            Navigator.pop(context)
           },
           icon: Icon(Icons.arrow_back),
           color: Palette.primaryDark2Color,
