@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
+bool state = false;
 
 class Configuration extends StatefulWidget {
   const Configuration({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _ConfigurationState extends State<Configuration> {
   String Username = "";
   String firstname = "";
   String lastname = "";
+  var valuenotif = ValueNotifier(0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,22 +71,22 @@ class _ConfigurationState extends State<Configuration> {
                         );
                       },
                     ),
-                    onTap: () => {},
+                    onTap: () => {Navigator.pop(context)},
                   )),
 
               Container(
-                  margin: EdgeInsets.all(4.0),
-                  padding: EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Palette.primaryColor,
-                            Palette.primaryHeadingColor
-                          ]),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: ListTile(
+                margin: EdgeInsets.all(4.0),
+                padding: EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Palette.primaryColor,
+                          Palette.primaryHeadingColor
+                        ]),
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
                     leading: Icon(Icons.person),
                     title: Text(
                       'Mon nom d\'utilisateur',
@@ -99,8 +101,13 @@ class _ConfigurationState extends State<Configuration> {
                         );
                       },
                     ),
-                    onTap: () => {},
-                  )),
+                    trailing: Icon(
+                      Icons.edit,
+                      color: Colors.lightBlueAccent,
+                    ),
+                    onTap: () => {updateUsername()}),
+              ),
+
               Container(
                   margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
@@ -127,6 +134,10 @@ class _ConfigurationState extends State<Configuration> {
                           style: TextStyle(color: Colors.white, fontSize: 18.0),
                         );
                       },
+                    ),
+                    trailing: Icon(
+                      Icons.edit,
+                      color: Colors.lightBlueAccent,
                     ),
                     onTap: () => {},
                   )),
@@ -157,8 +168,27 @@ class _ConfigurationState extends State<Configuration> {
                         );
                       },
                     ),
+                    trailing: Icon(
+                      Icons.edit,
+                      color: Colors.lightBlueAccent,
+                    ),
                     onTap: () => {},
                   )),
+              Container(
+                child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      // background color
+                      primary: Colors.redAccent,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      textStyle: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () => {},
+                    icon: Icon(Icons.delete_forever),
+                    label: Text(
+                      "Supprimer mon compte",
+                    )),
+              )
             ],
           )),
     );
@@ -176,5 +206,14 @@ class _ConfigurationState extends State<Configuration> {
               lastname = value['lastname']
               //  print(myPhoneNumber + "this"),
             });
+  }
+
+//This is a test function
+  updateUsername() {
+    valuenotif.value++;
+    return FirebaseFirestore.instance
+        .collection("Users")
+        .doc(cuurentUserID)
+        .update({"username": "Mehdi"});
   }
 }
