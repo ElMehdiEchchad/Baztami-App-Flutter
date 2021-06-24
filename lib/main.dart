@@ -20,6 +20,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: "BalooTammudu2",
       ),
+      /* darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        /* dark theme settings */
+      ),
+      themeMode: ThemeMode.light,*/
       //home: NaVBottomBar(),
       home: AuthService().handleAuth(),
     );

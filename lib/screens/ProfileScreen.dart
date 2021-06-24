@@ -2,9 +2,8 @@ import 'package:baztami_app_flutter/screens/MyInfo.dart';
 import 'package:baztami_app_flutter/screens/NousContacter.dart';
 import 'package:baztami_app_flutter/screens/credit_screen.dart';
 import 'package:flutter/material.dart';
-//import '/services/authservice.dart';
+import '/services/authservice.dart';
 import 'MainScreen.dart';
-import 'login.dart';
 import 'package:baztami_app_flutter/config/config.dart';
 import 'nav_bottom_bar.dart';
 
@@ -20,16 +19,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Palette.primaryDark2Color,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreditScreen()),
-            );
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   color: Palette.primaryDark2Color,
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => CreditScreen()),
+        //     );
+        //   },
+        // ),
         title: Padding(
           padding: EdgeInsets.fromLTRB(5.0, 5.0, 0, 0),
           child: Text(
@@ -48,10 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Palette.primaryHeadingColor,
             ),
             iconSize: 28.0,
-            onPressed: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MainScreen()))
-            },
+            onPressed: () => {_showMyDialog()},
           ),
         ],
       ),
@@ -150,6 +146,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm your action.'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Are you sure you want to Sign out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                AuthService().signOut();
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

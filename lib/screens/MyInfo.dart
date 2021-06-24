@@ -3,6 +3,8 @@ import 'package:baztami_app_flutter/widgets/BoxInfo.dart';
 import 'package:baztami_app_flutter/screens/screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:baztami_app_flutter/data/firestoreFunctions.dart';
 
 class MyInfo extends StatefulWidget {
   const MyInfo({
@@ -14,8 +16,6 @@ class MyInfo extends StatefulWidget {
 }
 
 class _MyInfoState extends State<MyInfo> {
-  String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class _MyInfoState extends State<MyInfo> {
           icon: Icon(Icons.arrow_back),
           color: Palette.primaryDark2Color,
         ),
-        title: Text(cuurentUserID,
+        title: Text("Your Information",
             style: TextStyle(
                 color: Palette.primaryHeadingColor,
                 fontSize: 20.0,
@@ -41,7 +41,7 @@ class _MyInfoState extends State<MyInfo> {
             children: <Widget>[
               BoxInfo(
                   LeadingIcon: Icon(Icons.add),
-                  MainTitle: "test of mainTitle",
+                  MainTitle: "Hello " + GetPhoneNumber().toString(),
                   subTitle: "Test of subtitle"),
               BoxInfo(
                   LeadingIcon: Icon(Icons.ac_unit_outlined),
@@ -55,6 +55,15 @@ class _MyInfoState extends State<MyInfo> {
           )),
     );
   }
+}
+
+String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
+String GetPhoneNumber() {
+  return FirebaseFirestore.instance
+      .collection("Users")
+      .doc(cuurentUserID)
+      .collection("phoneNumber")
+      .toString();
 }
 
 //here the info to go in the box is dynamic and will be retrieved from the backend
