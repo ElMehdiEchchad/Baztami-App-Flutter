@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'EditClient.dart';
 import 'ysalef_screen.dart';
 import 'yred_screen.dart';
-
 import 'screens.dart';
 
 class ClientScreen extends StatefulWidget {
@@ -21,6 +20,7 @@ class ClientScreen extends StatefulWidget {
 
 class _ClientScreenState extends State<ClientScreen> {
 
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
   _ClientScreenState(this.clientid);
   @override
@@ -50,14 +50,19 @@ class _ClientScreenState extends State<ClientScreen> {
                     icon: Image.asset("assets/images/retour.png"),
                   ),
                   Spacer(),
-                  Text(
-                    "NAME",
-                    style: TextStyle(
-                      color: Palette.backgroundColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userid).collection("Clients").doc(clientid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                    return Text(snapshot.data!['name'], style: TextStyle(
+                                        color: Palette.backgroundColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),);
+                    }),   
                   Spacer(),
                   IconButton(
                     onPressed: () {
@@ -85,14 +90,19 @@ class _ClientScreenState extends State<ClientScreen> {
                       ),
                       SizedBox(
                         height: 70,
-                        child: Text(
-                          "-40 DH",
-                          style: TextStyle(
-                            color: Palette.redColor,
-                            fontSize: 42,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: StreamBuilder<DocumentSnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Users')
+                                .doc(userid).collection("Clients").doc(clientid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                            return Text(snapshot.data!['amount'] + " DH", style: TextStyle(
+                                                  color: Palette.redColor,
+                                                  fontSize: 42,
+                                                  fontWeight: FontWeight.w600,
+                                              ),);
+                            }),   
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -198,8 +208,8 @@ class _ClientHistoryState extends State<ClientHistory> {
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
   _ClientHistoryState (this.clientid);
+
   void initState  () {
-    // TODO: implement initState
     super.initState();
     print("heyy"+clientid);
   }
@@ -231,20 +241,20 @@ class _ClientHistoryState extends State<ClientHistory> {
           child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData)
-          return Center(child: new CircularProgressIndicator());
-          return new ListView.builder(
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.only(right: 10),
-          itemCount:(snapshot.data!).docs.length,
-          itemBuilder: (BuildContext context, int index)
-          {
-          return  CustomListItem(
-          date: (snapshot.data!).docs[index]["date"],
-          description: "to add",
-          isDepense: (snapshot.data!).docs[index]["isSalaf"],
-          amount: double.parse((snapshot.data!).docs[index]["amount"]),
-          );
+                if (!snapshot.hasData)
+                    return Center(child: new CircularProgressIndicator());
+                        return new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            padding: EdgeInsets.only(right: 10),
+                            itemCount:(snapshot.data!).docs.length,
+                            itemBuilder: (BuildContext context, int index)
+                        {
+                        return  CustomListItem(
+                          date: (snapshot.data!).docs[index]["date"],
+                          description: "to add",
+                          isDepense: (snapshot.data!).docs[index]["isSalaf"],
+                          amount: double.parse((snapshot.data!).docs[index]["amount"]),
+                  );
           }
 
           );

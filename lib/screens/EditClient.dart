@@ -1,4 +1,6 @@
 import 'package:baztami_app_flutter/config/config.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'client_screen.dart';
 
@@ -12,6 +14,7 @@ class EditClient extends StatefulWidget {
 }
 
 class _EditClientState extends State<EditClient> {
+  final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
   _EditClientState(this.clientid);
   @override
@@ -33,14 +36,19 @@ class _EditClientState extends State<EditClient> {
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
                   SizedBox(width: 90),
-                  Text(
-                    "NAME",
-                    style: TextStyle(
-                      color: Palette.primaryLightColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userid).collection("Clients").doc(clientid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                    return Text(snapshot.data!['name'], style: TextStyle(
+                                        color: Palette.primaryColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),);
+                    }),
                 ],
               ),
             ),
