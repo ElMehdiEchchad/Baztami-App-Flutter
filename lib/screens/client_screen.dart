@@ -7,6 +7,7 @@ import 'EditClient.dart';
 import 'ysalef_screen.dart';
 import 'yred_screen.dart';
 import 'screens.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ClientScreen extends StatefulWidget {
 
@@ -170,7 +171,11 @@ class _ClientScreenState extends State<ClientScreen> {
                                 height: 45,
                                 child: new Center(
                                   child: new IconButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).collection("Clients").doc(clientid).get();
+                                      var number =variable['phonenumber'];
+                                      UrlLauncher.launch("tel://"+number);
+                                    },
                                     icon:
                                         Image.asset("assets/images/phone.png"),
                                   ),
