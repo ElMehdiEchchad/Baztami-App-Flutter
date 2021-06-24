@@ -1,22 +1,18 @@
 import 'package:baztami_app_flutter/config/config.dart';
-import 'package:baztami_app_flutter/data/firebase_wallets_repository.dart';
-import 'package:baztami_app_flutter/screens/Configuration.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class MyInfo extends StatefulWidget {
-  const MyInfo({
-    Key? key,
-  }) : super(key: key);
+final String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
+
+class Configuration extends StatefulWidget {
+  const Configuration({Key? key}) : super(key: key);
 
   @override
-  _MyInfoState createState() => _MyInfoState();
+  _ConfigurationState createState() => _ConfigurationState();
 }
 
-class _MyInfoState extends State<MyInfo> {
-  final String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
-
+class _ConfigurationState extends State<Configuration> {
   String myPhoneNumber = "";
   String Username = "";
   String firstname = "";
@@ -35,7 +31,7 @@ class _MyInfoState extends State<MyInfo> {
           icon: Icon(Icons.arrow_back),
           color: Palette.primaryDark2Color,
         ),
-        title: Text("My Information",
+        title: Text("Configuration",
             style: TextStyle(
                 color: Palette.primaryHeadingColor,
                 fontSize: 20.0,
@@ -45,7 +41,6 @@ class _MyInfoState extends State<MyInfo> {
           padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 5.0),
           child: ListView(
             children: <Widget>[
-              //using containers for data is better for the state
               Container(
                   margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
@@ -59,10 +54,10 @@ class _MyInfoState extends State<MyInfo> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.phone_in_talk),
+                    leading: Icon(Icons.add),
                     title: Text(
                       'My phone number ',
-                      style: TextStyle(color: Colors.lightBlue[200]),
+                      style: TextStyle(color: Colors.lightBlue),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -75,7 +70,6 @@ class _MyInfoState extends State<MyInfo> {
                     ),
                     onTap: () => {},
                   )),
-
               Container(
                   margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
@@ -89,10 +83,10 @@ class _MyInfoState extends State<MyInfo> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.person),
+                    leading: Icon(Icons.add),
                     title: Text(
                       'My username ',
-                      style: TextStyle(color: Colors.lightBlue[200]),
+                      style: TextStyle(color: Colors.lightBlue),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -118,10 +112,10 @@ class _MyInfoState extends State<MyInfo> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.supervised_user_circle),
+                    leading: Icon(Icons.add),
                     title: Text(
                       'My first name ',
-                      style: TextStyle(color: Colors.lightBlue[200]),
+                      style: TextStyle(color: Colors.lightBlue),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -135,7 +129,7 @@ class _MyInfoState extends State<MyInfo> {
                     onTap: () => {},
                   )),
               Container(
-                  margin: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 25.0),
+                  margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -147,10 +141,10 @@ class _MyInfoState extends State<MyInfo> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.supervised_user_circle),
+                    leading: Icon(Icons.add),
                     title: Text(
                       'My last name ',
-                      style: TextStyle(color: Colors.lightBlue[200]),
+                      style: TextStyle(color: Colors.lightBlue),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -162,22 +156,7 @@ class _MyInfoState extends State<MyInfo> {
                       },
                     ),
                     onTap: () => {},
-                  )),
-              Container(
-                padding: EdgeInsets.fromLTRB(25.0, 50.0, 25.0, 0.0),
-                child: ElevatedButton.icon(
-                    onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Configuration()))
-                        },
-                    icon: Icon(Icons.settings),
-                    label: Text(
-                      "Configurer mes informations",
-                      style: TextStyle(fontSize: 20.0),
-                    )),
-              )
+                  ))
             ],
           )),
     );

@@ -1,3 +1,4 @@
+import 'package:baztami_app_flutter/screens/Configuration.dart';
 import 'package:baztami_app_flutter/screens/MyInfo.dart';
 import 'package:baztami_app_flutter/screens/NousContacter.dart';
 import 'package:baztami_app_flutter/screens/credit_screen.dart';
@@ -95,7 +96,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Palette.primaryDark2Color,
                     ),
                     trailing: Icon(Icons.arrow_right_outlined),
-                    onTap: () {},
+                    onTap: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Configuration()))
+                    },
                   ),
                 ),
               ),
@@ -152,27 +158,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible:
+          true, //the user can dispose of the alert box either by pressing a cancel button or by pressing anywhere other the alert itself
+
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmez votre action.'),
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text('Are you sure you want to Sign out?'),
+                Text('Etes vous sûres de vouloir vous déconnecter?'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Confirm'),
+              child: Text('Confirmer'),
               onPressed: () {
                 Navigator.of(context).pop();
                 AuthService().signOut();
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text('Annuler'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
