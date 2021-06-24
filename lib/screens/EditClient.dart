@@ -35,7 +35,7 @@ class _EditClientState extends State<EditClient> {
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
-                  SizedBox(width: 90),
+                  SizedBox(width: 100),
                   StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('Users')
@@ -43,7 +43,9 @@ class _EditClientState extends State<EditClient> {
                         .snapshots(),
                     builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                    return Text(snapshot.data!['name'], style: TextStyle(
+                              if (!snapshot.hasData)
+                                      return Center(child: new CircularProgressIndicator());
+                                    return Text(snapshot.data!["name"], style: TextStyle(
                                         color: Palette.primaryColor,
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,

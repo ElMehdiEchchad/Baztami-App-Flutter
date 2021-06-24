@@ -58,12 +58,14 @@ class _ClientScreenState extends State<ClientScreen> {
                         .snapshots(),
                     builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
+                            if (!snapshot.hasData)
+                                      return Center(child: new CircularProgressIndicator());
                                     return Text(snapshot.data!['name'], style: TextStyle(
                                         color: Palette.backgroundColor,
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                       ),);
-                    }),   
+                    }), 
                   Spacer(),
                   IconButton(
                     onPressed: () {
@@ -98,6 +100,8 @@ class _ClientScreenState extends State<ClientScreen> {
                                 .snapshots(),
                             builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                    if (!snapshot.hasData)
+                                      return Center(child: new CircularProgressIndicator());
                                             return Text(snapshot.data!['amount'] + " DH", style: TextStyle(
                                                   color: Palette.redColor,
                                                   fontSize: 42,

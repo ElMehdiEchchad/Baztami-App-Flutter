@@ -54,20 +54,22 @@ class _YredScreenState extends State<YredScreen> {
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
-                  SizedBox(width: 90),
-                   StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(userid).collection("Clients").doc(clientid)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                    return Text(snapshot.data!['name'], style: TextStyle(
-                                        color: Palette.primaryColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                      ),);
-                    }), 
+                  SizedBox(width: 100),
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(userid).collection("Clients").doc(clientid)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (!snapshot.hasData)
+                                      return Center(child: new CircularProgressIndicator());
+                                      return Text(snapshot.data!['name'], style: TextStyle(
+                                          color: Palette.primaryColor,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),);
+                      }),
                 ],
               ),
             ),
