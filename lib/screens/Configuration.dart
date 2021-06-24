@@ -41,6 +41,7 @@ class _ConfigurationState extends State<Configuration> {
           padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 5.0),
           child: ListView(
             children: <Widget>[
+              //using containers for data is better for the state
               Container(
                   margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
@@ -54,10 +55,10 @@ class _ConfigurationState extends State<Configuration> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.add),
+                    leading: Icon(Icons.phone_in_talk),
                     title: Text(
-                      'My phone number ',
-                      style: TextStyle(color: Colors.lightBlue),
+                      'Mon numéro de téléphone ',
+                      style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -70,6 +71,7 @@ class _ConfigurationState extends State<Configuration> {
                     ),
                     onTap: () => {},
                   )),
+
               Container(
                   margin: EdgeInsets.all(4.0),
                   padding: EdgeInsets.all(5.0),
@@ -83,10 +85,10 @@ class _ConfigurationState extends State<Configuration> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.add),
+                    leading: Icon(Icons.person),
                     title: Text(
-                      'My username ',
-                      style: TextStyle(color: Colors.lightBlue),
+                      'Mon nom d\'utilisateur',
+                      style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -112,10 +114,10 @@ class _ConfigurationState extends State<Configuration> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.add),
+                    leading: Icon(Icons.supervised_user_circle),
                     title: Text(
-                      'My first name ',
-                      style: TextStyle(color: Colors.lightBlue),
+                      'Mon prénom ',
+                      style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -129,7 +131,7 @@ class _ConfigurationState extends State<Configuration> {
                     onTap: () => {},
                   )),
               Container(
-                  margin: EdgeInsets.all(4.0),
+                  margin: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 25.0),
                   padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -141,10 +143,10 @@ class _ConfigurationState extends State<Configuration> {
                           ]),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: ListTile(
-                    leading: Icon(Icons.add),
+                    leading: Icon(Icons.supervised_user_circle),
                     title: Text(
-                      'My last name ',
-                      style: TextStyle(color: Colors.lightBlue),
+                      'Mon nom ',
+                      style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
                       future: getUserData(),
@@ -156,7 +158,7 @@ class _ConfigurationState extends State<Configuration> {
                       },
                     ),
                     onTap: () => {},
-                  ))
+                  )),
             ],
           )),
     );

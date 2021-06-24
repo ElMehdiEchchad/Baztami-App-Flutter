@@ -35,7 +35,7 @@ class _MyInfoState extends State<MyInfo> {
           icon: Icon(Icons.arrow_back),
           color: Palette.primaryDark2Color,
         ),
-        title: Text("My Information",
+        title: Text("Mes informations",
             style: TextStyle(
                 color: Palette.primaryHeadingColor,
                 fontSize: 20.0,
@@ -61,7 +61,7 @@ class _MyInfoState extends State<MyInfo> {
                   child: ListTile(
                     leading: Icon(Icons.phone_in_talk),
                     title: Text(
-                      'My phone number ',
+                      'Mon numéro de téléphone ',
                       style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
@@ -91,7 +91,7 @@ class _MyInfoState extends State<MyInfo> {
                   child: ListTile(
                     leading: Icon(Icons.person),
                     title: Text(
-                      'My username ',
+                      'Mon nom d\'utilisateur',
                       style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
@@ -120,7 +120,7 @@ class _MyInfoState extends State<MyInfo> {
                   child: ListTile(
                     leading: Icon(Icons.supervised_user_circle),
                     title: Text(
-                      'My first name ',
+                      'Mon prénom ',
                       style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
@@ -149,7 +149,7 @@ class _MyInfoState extends State<MyInfo> {
                   child: ListTile(
                     leading: Icon(Icons.supervised_user_circle),
                     title: Text(
-                      'My last name ',
+                      'Mon nom ',
                       style: TextStyle(color: Colors.lightBlue[200]),
                     ),
                     subtitle: FutureBuilder(
@@ -163,9 +163,16 @@ class _MyInfoState extends State<MyInfo> {
                     ),
                     onTap: () => {},
                   )),
+              const SizedBox(height: 45),
               Container(
-                padding: EdgeInsets.fromLTRB(25.0, 50.0, 25.0, 0.0),
                 child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      // background color
+                      primary: Colors.orange,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      textStyle: TextStyle(fontSize: 20),
+                    ),
                     onPressed: () => {
                           Navigator.push(
                               context,
@@ -175,7 +182,6 @@ class _MyInfoState extends State<MyInfo> {
                     icon: Icon(Icons.settings),
                     label: Text(
                       "Configurer mes informations",
-                      style: TextStyle(fontSize: 20.0),
                     )),
               )
             ],
