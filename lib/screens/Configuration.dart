@@ -2,6 +2,7 @@ import 'package:baztami_app_flutter/config/config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 final String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
 bool state = false;
@@ -18,7 +19,9 @@ class _ConfigurationState extends State<Configuration> {
   String Username = "";
   String firstname = "";
   String lastname = "";
-  var valuenotif = ValueNotifier(0);
+  TextEditingController usernameController = new TextEditingController();
+  String usernameValue = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,14 +148,15 @@ class _ConfigurationState extends State<Configuration> {
                   margin: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 25.0),
                   padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Palette.primaryColor,
-                            Palette.primaryHeadingColor
-                          ]),
-                      borderRadius: BorderRadius.circular(10.0)),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Palette.primaryColor,
+                          Palette.primaryHeadingColor
+                        ]),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   child: ListTile(
                     leading: Icon(Icons.supervised_user_circle),
                     title: Text(
@@ -188,6 +192,24 @@ class _ConfigurationState extends State<Configuration> {
                     label: Text(
                       "Supprimer mon compte",
                     )),
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration:
+                          InputDecoration(contentPadding: EdgeInsets.all(10.0)),
+                    ),
+                    ElevatedButton.icon(
+                        onPressed: () => {
+                              usernameValue = usernameController.text,
+                            },
+                        icon: Icon(Icons.save),
+                        label: Text("Save"))
+                  ],
+                ),
               )
             ],
           )),
@@ -210,10 +232,9 @@ class _ConfigurationState extends State<Configuration> {
 
 //This is a test function
   updateUsername() {
-    valuenotif.value++;
     return FirebaseFirestore.instance
         .collection("Users")
         .doc(cuurentUserID)
-        .update({"username": "Mehdi"});
+        .update({"username": "test"});
   }
 }
