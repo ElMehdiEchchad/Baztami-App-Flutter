@@ -140,7 +140,14 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   "amount":amount.text,
                   "isSalaf":true
                 });
-                print("Omayma"+amount.toString());}, 
+                DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).collection("Clients").doc(clientid).get();
+                var initialamount =variable['amount'];
+                var total  =int.parse(initialamount) + int.parse(amount.text);
+
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
+                  "amount":total.toString(),
+                });
+                },
               child: Text(
                     "VALIDER",
                     style: TextStyle(

@@ -21,6 +21,8 @@ class _YredScreenState extends State<YredScreen> {
   late String _date ='Select date ..';
   TextEditingController amount = new TextEditingController() ;
 
+
+
   Future _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
@@ -31,6 +33,9 @@ class _YredScreenState extends State<YredScreen> {
     if(picked != null) setState(() => {_date = new DateFormat.yMMMMd("en_US").format(picked)
   });
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,12 +137,21 @@ class _YredScreenState extends State<YredScreen> {
        ),),
        SizedBox(height: 60),
             ElevatedButton(onPressed: () async{
+
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").doc().set({
                   "date": _date,
                   "amount":amount.text,
                   "isSalaf":false
                 });
-                print("Omayma"+amount.toString());}, 
+                DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).collection("Clients").doc(clientid).get();
+                var initialamount =variable['amount'];
+                var total  =int.parse(initialamount) -int.parse(amount.text);
+
+                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
+                  "amount":total.toString(),
+                });
+
+                print("Omayma"+amount.toString());},
               child: Text(
                     "VALIDER",
                     style: TextStyle(
