@@ -17,6 +17,7 @@ class _EditClientState extends State<EditClient> {
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
   _EditClientState(this.clientid);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +45,7 @@ class _EditClientState extends State<EditClient> {
                     builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
                               if (!snapshot.hasData)
-                                      return Center(child: new CircularProgressIndicator());
+                                      return Center(child: new Text(""));
                                     return Text(snapshot.data!["name"], style: TextStyle(
                                         color: Palette.primaryColor,
                                         fontSize: 20,
@@ -61,33 +62,55 @@ class _EditClientState extends State<EditClient> {
               Text("  NOM", 
                   style: TextStyle(color: Palette.primaryLightColor),
               ),
-              Container(
-                height: 50,
-                child: TextFormField(
-                decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                                        Radius.circular(15.0)),
-                        ),
-                        ),
-              ),
-              ),
+               StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userid).collection("Clients").doc(clientid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (!snapshot.hasData)
+                                      return Center(child: new Text(""));
+                                    return Container(
+                                          height: 50,
+                                          child: TextFormField(
+                                                initialValue: snapshot.data!["name"],
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.all(
+                                                                  Radius.circular(15.0))
+                                                  ),
+                                                  ),
+                                      ),
+                                        );
+               }),
               SizedBox(height:30),
               Text("  NUM TELEPHONE", style: 
                   TextStyle(color: Palette.primaryLightColor),
                   ),
-              Container(
-                height: 50,
-                child: TextFormField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                                        Radius.circular(15.0))
-                        ),
-                        ),
-             ),
-              )
+              StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userid).collection("Clients").doc(clientid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (!snapshot.hasData)
+                                      return Center(child: new Text(""));
+                                    return Container(
+                                          height: 50,
+                                          child: TextFormField(
+                                                initialValue: snapshot.data!["phonenumber"],
+                                                keyboardType: TextInputType.phone,
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.all(
+                                                                  Radius.circular(15.0))
+                                                  ),
+                                                  ),
+                                      ),
+                                        );
+               }),
                ],),
             ),
             SizedBox(height: 60),
