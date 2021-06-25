@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:baztami_app_flutter/data/firebase_user_repository.dart';
 import 'package:baztami_app_flutter/data/wallets_repository.dart';
 import 'package:baztami_app_flutter/models/models.dart';
 import 'package:bloc/bloc.dart';
@@ -44,6 +45,11 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   Stream<WalletState> _mapAddWalletTransactionsToState(
       AddWalletTransactions event) async* {
+    // FirebaseUserRepository().updateUser(new CurrentUser(
+    //     balanceGeneral: event.walletTransaction.amount,
+    //     depenses: 0.0,
+    //     id: '',
+    //     revenues: 0.0));
     _walletTransactionRepository
         .addNewWalletTransaction(event.walletTransaction);
   }

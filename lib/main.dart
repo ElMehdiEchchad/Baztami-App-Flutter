@@ -1,4 +1,6 @@
+import 'package:baztami_app_flutter/blocs/bloc/currentuser_bloc.dart';
 import 'package:baztami_app_flutter/blocs/simple_bloc_observer.dart';
+import 'package:baztami_app_flutter/data/firebase_user_repository.dart';
 import 'package:baztami_app_flutter/services/authservice.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +19,24 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<WalletBloc>(
-        create: (context) {
-          return WalletBloc(
-            walletTransactionRepository: FirebaseWalletTransactionsRepository(),
-          )..add(LoadWalletTransactions());
-        },
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<WalletBloc>(
+            create: (context) {
+              return WalletBloc(
+                walletTransactionRepository:
+                    FirebaseWalletTransactionsRepository(),
+              )..add(LoadWalletTransactions());
+            },
+          ),
+          BlocProvider<CurrentuserBloc>(
+            create: (context) {
+              return CurrentuserBloc(
+                userRepository: FirebaseUserRepository(),
+              )..add(LoadUser());
+            },
+          ),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Baztami',

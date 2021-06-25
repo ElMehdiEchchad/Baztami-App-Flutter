@@ -17,17 +17,10 @@ class FirebaseWalletTransactionsRepository
   final walletCollection = FirebaseFirestore.instance
       .collection('Users')
       .doc(cuurentUserID)
-      .collection("WalletBlance");
-
-  final userCollection =
-      FirebaseFirestore.instance.collection('Users').doc(cuurentUserID);
+      .collection("WalletBalance");
 
   @override
   Future<void> addNewWalletTransaction(WalletTransaction walletTransaction) {
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    print(userCollection.snapshots().toString());
-    userCollection
-        .update({"BalanceGeneral": walletTransaction.toEntity().amount});
     return walletCollection.add(walletTransaction.toEntity().toDocument());
   }
 
@@ -39,9 +32,10 @@ class FirebaseWalletTransactionsRepository
 
   @override
   Stream<List<WalletTransaction>> walletTransactions() {
-    return walletCollection.snapshots().map((snapshot) {
-      // print("snapshot");
-      //print(snapshot.docs);
+    return walletCollection
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs
           .map((doc) =>
               WalletTransaction.fromEntity(WalletEntity.fromSnapshot(doc)))

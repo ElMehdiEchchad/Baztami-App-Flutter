@@ -7,7 +7,7 @@ import '../entities/entities.dart';
 @immutable
 class WalletTransaction extends Equatable {
   final String id;
-  final String amount;
+  final double amount;
   final String description;
   final bool isDepense;
   final Timestamp date;
@@ -22,7 +22,7 @@ class WalletTransaction extends Equatable {
   WalletTransaction copyWith(
       {String? id,
       Timestamp? date,
-      String? amount,
+      double? amount,
       bool? isDepense,
       String? description}) {
     return WalletTransaction(id ?? this.id,

@@ -1,8 +1,10 @@
+import 'package:baztami_app_flutter/blocs/bloc/currentuser_bloc.dart';
 import 'package:baztami_app_flutter/config/palette.dart';
 import 'package:baztami_app_flutter/models/models.dart';
 import 'package:baztami_app_flutter/screens/wallet_historiques_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,18 +20,49 @@ class _GeneralBalanceGridWalletState extends State<GeneralBalanceGridWallet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          Row(
-            children: [_buildCardGenaral("Totale", "5000 DH ")],
-          ),
-          Row(
-            children: [
-              _buildCardADD("Revenus", "5000 DH "),
-              _buildCardMinus("Depenses", "50DH ")
-            ],
-          )
-        ],
+      child: BlocBuilder<CurrentuserBloc, CurrentuserState>(
+        builder: (context, state) {
+          if (state is CurrentUserLoaded) {
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    _buildCardGenaral("Totale",
+                        state.currentUser.balanceGeneral.toString() + " DH")
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildCardADD("Revenus",
+                        state.currentUser.revenues.toString() + " DH"),
+                    _buildCardMinus("Depenses",
+                        state.currentUser.depenses.toString() + " DH")
+                  ],
+                )
+              ],
+            );
+          }
+          if (state is CurrentUserFailed) {
+            return Center(child: Text("ERROR"));
+          }
+          if (state is CurrentUserLoading) {
+            return CircularProgressIndicator();
+          } else {
+            return Column(
+              children: [
+                Row(
+                  children: [_buildCardGenaral("Totale", "-   DH")],
+                ),
+                Row(
+                  children: [
+                    _buildCardADD("Revenus", "-    DH"),
+                    _buildCardMinus("Depenses", "-   DH")
+                  ],
+                )
+              ],
+            );
+          }
+        },
       ),
     );
   }
@@ -213,7 +246,7 @@ class _GeneralBalanceGridWalletState extends State<GeneralBalanceGridWallet> {
         builder: (context) => WalletHistoriqueScreen(
           isHistorique: false,
           walletTransaction: new WalletTransaction(Uuid().v1(),
-              amount: "00",
+              amount: 0.0,
               date: Timestamp.fromDate(DateTime.now()),
               description: "",
               isDepense: false),
@@ -233,7 +266,7 @@ class _GeneralBalanceGridWalletState extends State<GeneralBalanceGridWallet> {
           builder: (context) => WalletHistoriqueScreen(
             isHistorique: false,
             walletTransaction: new WalletTransaction(Uuid().v1(),
-                amount: "00",
+                amount: 0.0,
                 date: Timestamp.fromDate(DateTime.now()),
                 description: "",
                 isDepense: true),

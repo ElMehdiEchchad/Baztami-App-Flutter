@@ -1,14 +1,11 @@
 import 'package:baztami_app_flutter/blocs/walletTransaction_bloc/walletTransaction_bloc.dart';
 import 'package:baztami_app_flutter/config/config.dart';
-import 'package:baztami_app_flutter/data/firebase_wallets_repository.dart';
-import 'package:baztami_app_flutter/models/models.dart';
 
 import 'package:baztami_app_flutter/screens/wallet_historiques_screen.dart';
 import 'package:baztami_app_flutter/widgets/custom_appBar.dart';
 import 'package:baztami_app_flutter/widgets/custom_list_item_in_wallet.dart';
 import 'package:baztami_app_flutter/widgets/custom_loading_wallet_screen_shimmer_effect_wallet.dart';
 import 'package:baztami_app_flutter/widgets/general_balance_grid_wallet.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

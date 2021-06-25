@@ -36,9 +36,9 @@ class AuthService {
       createUserCollection(
           uid: userCredential.user!.uid,
           phoneNumber: userCredential.user!.phoneNumber,
-          balanceGeneral: "0.00",
-          depenses: "0.00",
-          revenus: "0.00");
+          balanceGeneral: 0.00,
+          depenses: 0.00,
+          revenus: 0.00);
       return 1;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
@@ -64,14 +64,14 @@ class AuthService {
   Future createUserCollection(
       {required String uid,
       String? phoneNumber,
-      String? balanceGeneral,
-      String? depenses,
-      String? revenus}) async {
+      double? balanceGeneral,
+      double? depenses,
+      double? revenus}) async {
     return await userCollection.doc(uid).set({
       "phoneNumber": phoneNumber,
       "BalanceGeneral": balanceGeneral,
       "Depenses": depenses,
-      "Revenus": revenus,
+      "Revenues": revenus,
     });
   }
 }

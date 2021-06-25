@@ -1,3 +1,4 @@
+import 'package:baztami_app_flutter/blocs/bloc/currentuser_bloc.dart';
 import 'package:baztami_app_flutter/blocs/walletTransaction_bloc/wallet_bloc.dart';
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/models/models.dart';
@@ -8,33 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class WalletHistoriqueScreen extends StatefulWidget with PreferredSizeWidget {
-  // final String date;
-  // final bool isDepense;
-  // String? description;
-  // final String amount;
-  // String? historiqueID;
   final WalletTransaction walletTransaction;
   final bool isHistorique;
   WalletHistoriqueScreen(
-      {Key? key,
-      // required this.date,
-      // required this.isDepense,
-      // this.description,
-      // required this.amount,
-      // this.historiqueID
-      required this.isHistorique,
-      required this.walletTransaction})
+      {Key? key, required this.isHistorique, required this.walletTransaction})
       : super(key: key);
 
   @override
   _WalletHistoriqueScreenState createState() => _WalletHistoriqueScreenState(
-      // date: this.date,
-      // amount: this.amount,
-      // description: this.description,
-      // historiqueID: this.historiqueID,
-      // isDepense: this.isDepense
-      isHistorique: isHistorique,
-      walletTransaction: walletTransaction);
+      isHistorique: isHistorique, walletTransaction: walletTransaction);
 
   @override
   // TODO: implement preferredSize
@@ -51,7 +34,7 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
   final bool isHistorique;
 
   //----------------------------------
-  String? amount;
+  double? amount;
   String? description;
   String? date;
   String? historiqueID;
@@ -63,8 +46,8 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     _enabled = this.isHistorique ? false : true;
     _controller =
         new TextEditingController(text: this.walletTransaction.description);
-    _amountController =
-        new TextEditingController(text: this.walletTransaction.amount);
+    _amountController = new TextEditingController(
+        text: this.walletTransaction.amount.toString());
   }
 
   @override
@@ -167,6 +150,7 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
               SizedBox(
                 height: 150,
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -181,13 +165,6 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                         onPressed: () {
                           if (_enabled) {
                             _handleSauvegarder(context);
-                            // BlocProvider.of<WalletBloc>(context).add(
-                            //     AddWalletTransactions(new WalletTransaction(
-                            //         amount: "30",
-                            //         date: Timestamp.fromDate(DateTime.now()),
-                            //         isDepense: true,
-                            //         description: "test tes a supprimer",
-                            //         id: 'hhhhhhhhhhhhhhhh')));
                           } else {
                             _handleModifier();
                           }
@@ -215,7 +192,7 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
                     ],
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -223,17 +200,61 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final state = BlocProvider.of<CurrentuserBloc>(context).state;
+      if (state is CurrentUserLoaded) {
+        currentUser = state.currentUser;
+      }
+    });
+  }
+
+  late CurrentUser currentUser;
+
   _handleSauvegarder(BuildContext context) async {
     this.setState(() {
       _enabled = !_enabled;
     });
-    BlocProvider.of<WalletBloc>(context).add(isHistorique == false
-        ? AddWalletTransactions(walletTransaction.copyWith(
-            amount: amount, description: _controller.text))
-        : UpdateWalletTransactions(walletTransaction.copyWith(
-                amount: amount, description: _controller.text)
-            // )
-            ));
+    if (isHistorique == true) {
+      BlocProvider.of<WalletBloc>(context).add(UpdateWalletTransactions(
+          walletTransaction.copyWith(
+              amount: amount, description: _controller.text)));
+    } else {
+      BlocProvider.of<WalletBloc>(context).add(AddWalletTransactions(
+          walletTransaction.copyWith(
+              amount: amount, description: _controller.text)));
+      BlocProvider.of<CurrentuserBloc>(context).add(
+        UpdateUser(
+          walletTransaction.isDepense
+              ? CurrentUser(
+                  balanceGeneral: currentUser.balanceGeneral -
+                      num.parse(
+                        amount.toString(),
+                      ),
+                  depenses: currentUser.depenses +
+                      num.parse(
+                        amount.toString(),
+                      ),
+                  id: "",
+                  revenues: currentUser.revenues)
+              : CurrentUser(
+                  balanceGeneral: currentUser.balanceGeneral +
+                      num.parse(
+                        amount.toString(),
+                      ),
+                  depenses: currentUser.depenses,
+                  id: "",
+                  revenues: currentUser.revenues +
+                      num.parse(
+                        amount.toString(),
+                      ),
+                ),
+        ),
+      );
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -253,7 +274,7 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     return AutoSizeTextField(
       onChanged: (value) => {
         this.setState(() {
-          amount = value;
+          amount = double.parse(value);
         })
       },
       minWidth: null,

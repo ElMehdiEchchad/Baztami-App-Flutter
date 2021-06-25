@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 
 class WalletEntity extends Equatable {
   final String id;
-  final String amount;
+  final double amount;
   final String description;
   final bool isDepense;
   final Timestamp date;
@@ -38,7 +38,7 @@ class WalletEntity extends Equatable {
       json['id'] as String,
       json['date'] as Timestamp,
       json['description'] as String,
-      json['amount'] as String,
+      json['amount'] as double,
       json['isDepense'] as bool,
     );
   }
