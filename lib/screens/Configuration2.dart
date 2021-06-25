@@ -3,7 +3,7 @@ import 'package:baztami_app_flutter/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/services/authservice.dart';
+import 'package:baztami_app_flutter/services/authservice.dart';
 
 class Configuration2 extends StatefulWidget {
   const Configuration2({Key? key}) : super(key: key);

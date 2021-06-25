@@ -45,9 +45,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
@@ -166,9 +164,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   "entrée":entree,
                   "sortie" :sortie
                 });
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
+                Navigator.pop(context);
                 },
               child: Text(
                     "VALIDER",
@@ -188,9 +184,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   ),),
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );}, 
+                   Navigator.pop(context);}, 
               child: Text(
                     "ANNULER",
                     style: TextStyle(

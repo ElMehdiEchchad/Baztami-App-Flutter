@@ -39,10 +39,7 @@ class _ClientScreenState extends State<ClientScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.pop(
-                        context,
-                        MaterialPageRoute(builder: (context) => CreditScreen()),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retour.png"),
                   ),

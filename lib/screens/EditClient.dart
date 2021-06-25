@@ -21,14 +21,16 @@ class _EditClientState extends State<EditClient> {
   TextEditingController phonenumber = new TextEditingController() ;
   _EditClientState(this.clientid);
 
-  final _formKeyName = GlobalKey<FormState>();
-  final _formKeyPhone = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
-        child: Column(
+        child: Form(
+          key: _formKey,
+          child: Column(
           children: [
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10, top: 35),
@@ -36,9 +38,7 @@ class _EditClientState extends State<EditClient> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid)),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
@@ -80,7 +80,6 @@ class _EditClientState extends State<EditClient> {
                                     return Container(
                                           height: 50,
                                           child: TextFormField(
-                                                key: _formKeyName,
                                                 controller: name,
                                                 decoration: InputDecoration(
                                                   hintText: snapshot.data!["name"],
@@ -112,7 +111,6 @@ class _EditClientState extends State<EditClient> {
                                     return Container(
                                           height: 50,
                                           child: TextFormField(
-                                                key: _formKeyPhone,
                                                 controller: phonenumber,
                                                 keyboardType: TextInputType.phone,
                                                 decoration: InputDecoration(
@@ -133,14 +131,15 @@ class _EditClientState extends State<EditClient> {
             ),
             SizedBox(height: 60),
             ElevatedButton(onPressed: () async{
-              await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Processing Data')));
+                    await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
                   "name": name.text,
                   "phonenumber": phonenumber.text,
                 });
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
-              
+                Navigator.pop(context);
+              }
             }, 
               child: Text(
                     "VALIDER",
@@ -182,6 +181,6 @@ class _EditClientState extends State<EditClient> {
                     primary: Palette.redColor,
                   ),)
             ],),
-    ));
+    ),));
   }
 }

@@ -48,9 +48,7 @@ class _YredScreenState extends State<YredScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid:clientid)),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
@@ -169,9 +167,7 @@ class _YredScreenState extends State<YredScreen> {
                     "entrée":entree,
                     "sortie" :sortie
                   });
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
+                  Navigator.pop(context);
                   },
               child: Text(
                     "VALIDER",
@@ -191,9 +187,7 @@ class _YredScreenState extends State<YredScreen> {
                   ),),
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid)),
-                      );}, 
+                    Navigator.pop(context);}, 
               child: Text(
                     "ANNULER",
                     style: TextStyle(
