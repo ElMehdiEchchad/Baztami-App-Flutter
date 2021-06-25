@@ -10,23 +10,19 @@ import 'screens.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class ClientScreen extends StatefulWidget {
-
   final String clientid;
-  const ClientScreen({Key,key, required this.clientid}) : super(key: key);
-
+  const ClientScreen({Key, key, required this.clientid}) : super(key: key);
 
   @override
   _ClientScreenState createState() => _ClientScreenState(this.clientid);
 }
 
 class _ClientScreenState extends State<ClientScreen> {
-
-  final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  final String userid = FirebaseAuth.instance.currentUser!.uid;
   final String clientid;
   _ClientScreenState(this.clientid);
 
-
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.primaryLightColor,
@@ -45,26 +41,36 @@ class _ClientScreenState extends State<ClientScreen> {
                   ),
                   Spacer(),
                   StreamBuilder<DocumentSnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(userid).collection("Clients").doc(clientid)
-                        .snapshots(),
-                    builder: (BuildContext context,
+                      stream: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(userid)
+                          .collection("Clients")
+                          .doc(clientid)
+                          .snapshots(),
+                      builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                            if (!snapshot.hasData)
-                                      return Center(child: new CircularProgressIndicator());
-                                    return Text(snapshot.data!['name'], style: TextStyle(
-                                        color: Palette.backgroundColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                      ),);
-                    }), 
+                        if (!snapshot.hasData)
+                          return Center(child: new CircularProgressIndicator());
+                        return Text(
+                          snapshot.data!['name'],
+                          style: TextStyle(
+                            color: Palette.backgroundColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      }),
                   Spacer(),
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EditClient(clientid: clientid,)),
-                      );},
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditClient(
+                                  clientid: clientid,
+                                )),
+                      );
+                    },
                     icon: Image.asset("assets/images/editer.png"),
                   )
                 ],
@@ -89,26 +95,35 @@ class _ClientScreenState extends State<ClientScreen> {
                         child: StreamBuilder<DocumentSnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('Users')
-                                .doc(userid).collection("Clients").doc(clientid)
+                                .doc(userid)
+                                .collection("Clients")
+                                .doc(clientid)
                                 .snapshots(),
                             builder: (BuildContext context,
-                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                    if (!snapshot.hasData)
-                                      return Center(child: new CircularProgressIndicator());
-                                            if(snapshot.data!["isSalaf"]==true){
-                                                return Text("- "+snapshot.data!['amount'] + " DH", style: TextStyle(
-                                                      color: Palette.redColor,
-                                                      fontSize: 42,
-                                                      fontWeight: FontWeight.w600,
-                                                  ),);}
-                                              else{
-                                                return Text("+ "+snapshot.data!['amount'] + " DH", style: TextStyle(
-                                                      color: Palette.greenColor,
-                                                      fontSize: 42,
-                                                      fontWeight: FontWeight.w600,
-                                                  ),);
-                                              }
-                            }),   
+                                AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (!snapshot.hasData)
+                                return Center(
+                                    child: new CircularProgressIndicator());
+                              if (snapshot.data!["isSalaf"] == true) {
+                                return Text(
+                                  "- " + snapshot.data!['amount'] + " DH",
+                                  style: TextStyle(
+                                    color: Palette.redColor,
+                                    fontSize: 42,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                );
+                              } else {
+                                return Text(
+                                  "+ " + snapshot.data!['amount'] + " DH",
+                                  style: TextStyle(
+                                    color: Palette.greenColor,
+                                    fontSize: 42,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                );
+                              }
+                            }),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,9 +138,15 @@ class _ClientScreenState extends State<ClientScreen> {
                                 height: 45,
                                 child: new Center(
                                   child: new IconButton(
-                                    onPressed: () {Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => YsalefScreen(clientid:clientid ,)),
-                                        );},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => YsalefScreen(
+                                                  clientid: clientid,
+                                                )),
+                                      );
+                                    },
                                     icon:
                                         Image.asset("assets/images/ysalef.png"),
                                   ),
@@ -150,9 +171,12 @@ class _ClientScreenState extends State<ClientScreen> {
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) => YredScreen(clientid: clientid)),
-                                        );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                YredScreen(clientid: clientid)),
+                                      );
                                     },
                                     icon: Image.asset("assets/images/yrad.png"),
                                   ),
@@ -177,9 +201,15 @@ class _ClientScreenState extends State<ClientScreen> {
                                 child: new Center(
                                   child: new IconButton(
                                     onPressed: () async {
-                                      DocumentSnapshot variable = await FirebaseFirestore.instance.collection("Users").doc(userid).collection("Clients").doc(clientid).get();
-                                      var number =variable['phonenumber'];
-                                      UrlLauncher.launch("tel://"+number);
+                                      DocumentSnapshot variable =
+                                          await FirebaseFirestore.instance
+                                              .collection("Users")
+                                              .doc(userid)
+                                              .collection("Clients")
+                                              .doc(clientid)
+                                              .get();
+                                      var number = variable['phonenumber'];
+                                      UrlLauncher.launch("tel://" + number);
                                     },
                                     icon:
                                         Image.asset("assets/images/phone.png"),
@@ -199,7 +229,7 @@ class _ClientScreenState extends State<ClientScreen> {
                   )),
             ),
             SizedBox(height: 20),
-            Expanded(child: ClientHistory(clientid:clientid)),
+            Expanded(child: ClientHistory(clientid: clientid)),
           ],
         ),
       ),
@@ -209,20 +239,21 @@ class _ClientScreenState extends State<ClientScreen> {
 
 class ClientHistory extends StatefulWidget {
   final String clientid;
-  const ClientHistory({Key,key, required this.clientid}) : super(key: key);
+  const ClientHistory({Key, key, required this.clientid}) : super(key: key);
   @override
   _ClientHistoryState createState() => _ClientHistoryState(this.clientid);
 }
 
 class _ClientHistoryState extends State<ClientHistory> {
-  final String userid = FirebaseAuth.instance.currentUser!.uid ;
+  final String userid = FirebaseAuth.instance.currentUser!.uid;
   final String clientid;
-  _ClientHistoryState (this.clientid);
+  _ClientHistoryState(this.clientid);
 
-  void initState  () {
+  void initState() {
     super.initState();
-    print("heyy"+clientid);
+    print("heyy" + clientid);
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -247,30 +278,36 @@ class _ClientHistoryState extends State<ClientHistory> {
             ),
           ],
         ),
-        Expanded(child:  Container(
-          child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData)
-                    return Center(child: new CircularProgressIndicator());
-                        return new ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            padding: EdgeInsets.only(right: 10),
-                            itemCount:(snapshot.data!).docs.length,
-                            itemBuilder: (BuildContext context, int index)
-                        {
-                        return  CustomListItem(
-                          date: (snapshot.data!).docs[index]["date"],
-                          description: "",
-                          isDepense: (snapshot.data!).docs[index]["isSalaf"],
-                          amount: double.parse((snapshot.data!).docs[index]["amount"]),
-                  );
-          }
-
-          );
-
-          }
-          )))
+        Expanded(
+            child: Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userid)
+                        .collection("Clients")
+                        .doc(clientid)
+                        .collection("Transactions")
+                        .orderBy("date", descending: true)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData)
+                        return Center(child: new CircularProgressIndicator());
+                      return new ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          padding: EdgeInsets.only(right: 10),
+                          itemCount: (snapshot.data!).docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CustomListItem(
+                              date: (snapshot.data!).docs[index]["date"],
+                              description: "",
+                              isDepense: (snapshot.data!).docs[index]
+                                  ["isSalaf"],
+                              amount: double.parse(
+                                  (snapshot.data!).docs[index]["amount"]),
+                            );
+                          });
+                    })))
       ]),
     );
   }

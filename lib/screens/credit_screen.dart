@@ -69,7 +69,7 @@ class _CreditScreenState extends State<CreditScreen> {
                           return Center(child: new CircularProgressIndicator());
                         return topcards(
                             title: "Entrée",
-                            sum: "+" +
+                            sum: "+ " +
                                 (snapshot.data!)["entrée"].toString() +
                                 " DH");
                       }),
@@ -86,7 +86,7 @@ class _CreditScreenState extends State<CreditScreen> {
                           return Center(child: new CircularProgressIndicator());
                         return topcards(
                             title: "Sortie",
-                            sum: "+" +
+                            sum: "- " +
                                 (snapshot.data!)["sortie"].toString() +
                                 " DH");
                       }),
@@ -128,6 +128,7 @@ class _CreditScreenState extends State<CreditScreen> {
                             .collection('Users')
                             .doc(userid)
                             .collection("Clients")
+                            .orderBy("date", descending: false)
                             .snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot) {
