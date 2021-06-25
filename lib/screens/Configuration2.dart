@@ -18,6 +18,9 @@ class _Configuration2State extends State<Configuration2> {
   String myPhoneNumber = "";
   String firstname = "";
   String lastname = "";
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController firstNameController = new TextEditingController();
+  TextEditingController lastNameController = new TextEditingController();
 
   void getdata() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
@@ -29,7 +32,7 @@ class _Configuration2State extends State<Configuration2> {
       myPhoneNumber = variable["phoneNumber"];
       firstname = variable["firstname"];
       lastname = variable["lastname"];
-      print(username);
+      // print(username);
     });
   }
 
@@ -92,6 +95,234 @@ class _Configuration2State extends State<Configuration2> {
                 }),
           ),
           Container(
+            margin: EdgeInsets.all(4.0),
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Palette.primaryColor, Palette.primaryHeadingColor]),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(cuurentUserID)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!(snapshot.hasData)) {
+                    return Center(child: new CircularProgressIndicator());
+                  }
+                  ////////////////////////////////
+                  /////////////////////
+                  else if ((snapshot.data!)["username"] == " ") {
+                    return ListTile(
+                      leading: Icon(Icons.verified_user),
+                      title: Text(
+                        "Mon Nom d'utilisateur",
+                        style: TextStyle(color: Colors.lightBlue[200]),
+                      ),
+                      subtitle: Text(
+                        "Pas de valeur assignée",
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      ),
+                    );
+                  }
+                  ///////////////////////////////////////////
+                  /////////////////
+
+                  else {
+                    return ListTile(
+                      leading: Icon(Icons.verified_user),
+                      title: Text(
+                        "Mon Nom d'utilisateur",
+                        style: TextStyle(color: Colors.lightBlue[200]),
+                      ),
+                      subtitle: TextField(
+                        decoration: InputDecoration(
+                          hintText: (snapshot.data!)["username"],
+                          hintStyle:
+                              TextStyle(color: Colors.white, fontSize: 18.0),
+                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.save,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      ),
+                    );
+                  }
+                }),
+          ),
+
+          ///////////////////////////////
+          ///
+          ///
+          /////////////////////////////
+          ///
+          Container(
+            margin: EdgeInsets.all(4.0),
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Palette.primaryColor, Palette.primaryHeadingColor]),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(cuurentUserID)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!(snapshot.hasData)) {
+                    return Center(child: new CircularProgressIndicator());
+                  }
+                  ////////////////////////////////
+                  /////////////////////
+                  else if ((snapshot.data!)["firstname"] == " ") {
+                    return ListTile(
+                        leading: Icon(Icons.supervised_user_circle),
+                        title: Text(
+                          "Mon prénom",
+                          style: TextStyle(color: Colors.lightBlue[200]),
+                        ),
+                        subtitle: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Saisisez votre prénom",
+                            hintStyle:
+                                TextStyle(color: Colors.white, fontSize: 18.0),
+                          ),
+                          style: TextStyle(color: Colors.white, fontSize: 18.0),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 30.0,
+                            )));
+                  }
+                  ///////////////////////////////////////////
+                  /////////////////
+
+                  else {
+                    return ListTile(
+                      leading: Icon(Icons.supervised_user_circle),
+                      title: Text(
+                        "Mon prénom",
+                        style: TextStyle(color: Colors.lightBlue[200]),
+                      ),
+                      subtitle: TextField(
+                        decoration: InputDecoration(
+                          hintText: (snapshot.data!)["firstname"],
+                          hintStyle:
+                              TextStyle(color: Colors.white, fontSize: 18.0),
+                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.save,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      ),
+                    );
+                  }
+                }),
+          ),
+
+          Container(
+            margin: EdgeInsets.all(4.0),
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Palette.primaryColor, Palette.primaryHeadingColor]),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(cuurentUserID)
+                    .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!(snapshot.hasData)) {
+                    return Center(child: new CircularProgressIndicator());
+                  }
+                  ////////////////////////////////
+                  /////////////////////
+                  else if ((snapshot.data!)["lastname"] == " ") {
+                    return ListTile(
+                        leading: Icon(Icons.supervised_user_circle),
+                        title: Text(
+                          "Mon Nom",
+                          style: TextStyle(color: Colors.lightBlue[200]),
+                        ),
+                        subtitle: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Saisisez votre nom",
+                            hintStyle:
+                                TextStyle(color: Colors.white, fontSize: 18.0),
+                          ),
+                          style: TextStyle(color: Colors.white, fontSize: 18.0),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 30.0,
+                            )));
+                  }
+                  ///////////////////////////////////////////
+                  /////////////////
+
+                  else {
+                    return ListTile(
+                      leading: Icon(Icons.supervised_user_circle),
+                      title: Text(
+                        "Mon Nom",
+                        style: TextStyle(color: Colors.lightBlue[200]),
+                      ),
+                      subtitle: TextField(
+                        decoration: InputDecoration(
+                          hintText: (snapshot.data!)["lastname"],
+                          hintStyle:
+                              TextStyle(color: Colors.white, fontSize: 18.0),
+                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.save,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      ),
+                    );
+                  }
+                }),
+          ),
+
+          /* Container(
             margin: EdgeInsets.all(4.0),
             padding: EdgeInsets.all(5.0),
             decoration: BoxDecoration(
@@ -177,8 +408,10 @@ class _Configuration2State extends State<Configuration2> {
                     .doc(cuurentUserID)
                     .snapshots(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData)
+                  if (!snapshot.hasData) {
                     return Center(child: new CircularProgressIndicator());
+                  }
+
                   return ListTile(
                     leading: Icon(Icons.phone_in_talk),
                     title: Text(
@@ -195,7 +428,7 @@ class _Configuration2State extends State<Configuration2> {
                     ),
                   );
                 }),
-          ),
+          ),*/
           SizedBox(
             height: 30.0,
           ),
@@ -213,48 +446,6 @@ class _Configuration2State extends State<Configuration2> {
                   "Supprimer mon compte",
                 )),
           ),
-          SizedBox(
-            height: 40,
-          ),
-
-          //This is for test purposes
-          /* Container(
-            margin: EdgeInsets.all(4.0),
-            padding: EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Palette.primaryColor, Palette.primaryHeadingColor]),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: ListTile(
-              leading: Icon(Icons.phone_in_talk),
-              title: Text("Test"),
-
-              
-
-              subtitle: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection("Users")
-                      .doc(cuurentUserID)
-                      .snapshots(),
-                 
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!(snapshot).hasData) return Text('');
-                    return Text(
-                      (snapshot.data)["lastname"].toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 18.0),
-                    );
-                  }),
-
-              trailing: Icon(
-                Icons.edit,
-                color: Colors.lightBlueAccent,
-              ),
-            ),
-          ),
-          */
         ]),
       ),
     );
@@ -280,23 +471,15 @@ class _Configuration2State extends State<Configuration2> {
             TextButton(
               child: Text('Confirmer'),
               onPressed: () {
-                try {
-                  FirebaseAuth.instance.currentUser!.delete();
+                String currentid = FirebaseAuth.instance.currentUser!.uid;
+                FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(currentid)
+                    .delete();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
 
-                  Navigator.of(context).pop();
-                  // FirebaseFirestore.instance
-                  //     .collection("Users")
-                  //     .doc(cuurentUserID)
-                  //     .delete();
-                  AuthService().signOut();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'requires-recent-login') {
-                    print(
-                        'The user must reauthenticate before this operation can be executed.');
-                  }
-                }
+                Navigator.pop(context);
               },
             ),
             TextButton(
