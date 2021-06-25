@@ -34,11 +34,8 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
   final bool isHistorique;
 
   //----------------------------------
-  double? amount;
-  String? description;
-  String? date;
-  String? historiqueID;
-  bool? isDepense;
+  late double amount;
+  late double previousAmount;
   //----------------------------------
 
   _WalletHistoriqueScreenState(
@@ -46,8 +43,10 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
     _enabled = this.isHistorique ? false : true;
     _controller =
         new TextEditingController(text: this.walletTransaction.description);
+    amount = this.walletTransaction.amount;
     _amountController = new TextEditingController(
         text: this.walletTransaction.amount.toString());
+    previousAmount = this.walletTransaction.amount;
   }
 
   @override
@@ -221,6 +220,41 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
       BlocProvider.of<WalletBloc>(context).add(UpdateWalletTransactions(
           walletTransaction.copyWith(
               amount: amount, description: _controller.text)));
+      //traitment when update number
+      if (previousAmount != amount) {
+        BlocProvider.of<CurrentuserBloc>(context).add(
+          UpdateUser(
+            walletTransaction.isDepense
+                ? CurrentUser(
+                    balanceGeneral: currentUser.balanceGeneral -
+                        num.parse(
+                          amount.toString(),
+                        ) +
+                        previousAmount,
+                    depenses: currentUser.depenses +
+                        num.parse(
+                          amount.toString(),
+                        ) -
+                        previousAmount,
+                    id: "",
+                    revenues: currentUser.revenues)
+                : CurrentUser(
+                    balanceGeneral: currentUser.balanceGeneral +
+                        num.parse(
+                          amount.toString(),
+                        ) -
+                        previousAmount,
+                    depenses: currentUser.depenses,
+                    id: "",
+                    revenues: currentUser.revenues +
+                        num.parse(
+                          amount.toString(),
+                        ) -
+                        previousAmount,
+                  ),
+          ),
+        );
+      }
     } else {
       BlocProvider.of<WalletBloc>(context).add(AddWalletTransactions(
           walletTransaction.copyWith(
@@ -267,6 +301,33 @@ class _WalletHistoriqueScreenState extends State<WalletHistoriqueScreen> {
   _handleSupprimer() {
     BlocProvider.of<WalletBloc>(context)
         .add(DeleteWalletTransactions(walletTransaction));
+    BlocProvider.of<CurrentuserBloc>(context).add(UpdateUser(
+      walletTransaction.isDepense
+          ? CurrentUser(
+              balanceGeneral: currentUser.balanceGeneral +
+                  num.parse(
+                    amount.toString(),
+                  ),
+              depenses: currentUser.depenses -
+                  num.parse(
+                    amount.toString(),
+                  ),
+              id: "",
+              revenues: currentUser.revenues)
+          : CurrentUser(
+              balanceGeneral: currentUser.balanceGeneral -
+                  num.parse(
+                    amount.toString(),
+                  ),
+              depenses: currentUser.depenses,
+              id: "",
+              revenues: currentUser.revenues -
+                  num.parse(
+                    amount.toString(),
+                  ),
+            ),
+    ));
+
     Navigator.of(context).pop();
   }
 
