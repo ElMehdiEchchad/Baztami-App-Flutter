@@ -128,7 +128,7 @@ class _ContactUsState extends State<ContactUs> {
                     "Contactez nous par mail",
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
-                  onTap: () => {_launchEmail()},
+                  onTap: () => {launch("mailto:elmehdiechchad@gmail.com")},
                 )),
           ],
         ),
@@ -143,18 +143,5 @@ _launchFacebook() async {
     await launch(url);
   } else {
     throw 'Could not launch $url';
-  }
-}
-
-void _launchEmail() async {
-  final Uri params = Uri(
-    scheme: 'mailto',
-    path: 'elmehdiechchad@gmail.com',
-  );
-  String url = params.toString();
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    print('Could not launch $url');
   }
 }

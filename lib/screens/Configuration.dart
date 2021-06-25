@@ -1,8 +1,10 @@
 import 'package:baztami_app_flutter/config/config.dart';
+import 'package:baztami_app_flutter/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import '/services/authservice.dart';
 
 final String cuurentUserID = FirebaseAuth.instance.currentUser!.uid;
 bool state = false;
@@ -187,7 +189,7 @@ class _ConfigurationState extends State<Configuration> {
                           EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       textStyle: TextStyle(fontSize: 20),
                     ),
-                    onPressed: () => {},
+                    onPressed: () => {_showMyDialog()},
                     icon: Icon(Icons.delete_forever),
                     label: Text(
                       "Supprimer mon compte",
@@ -195,7 +197,7 @@ class _ConfigurationState extends State<Configuration> {
               ),
 
               //All of what's below is for test purposes
-              Container(
+              /*      Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -212,9 +214,51 @@ class _ConfigurationState extends State<Configuration> {
                         label: Text("Save"))
                   ],
                 ),
-              )
+              )*/
             ],
           )),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          true, //the user can dispose of the alert box either by pressing a cancel button or by pressing anywhere other the alert itself
+
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmez votre action.'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Etes vous sûres de vouloir Supprimer votre compte?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirmer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(cuurentUserID)
+                    .delete();
+                AuthService().signOut();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+            ),
+            TextButton(
+              child: Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -237,6 +281,6 @@ class _ConfigurationState extends State<Configuration> {
     return FirebaseFirestore.instance
         .collection("Users")
         .doc(cuurentUserID)
-        .update({"username": "test"});
+        .update({"username": "MehdiEchchad1"});
   }
 }
