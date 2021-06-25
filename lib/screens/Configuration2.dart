@@ -280,14 +280,23 @@ class _Configuration2State extends State<Configuration2> {
             TextButton(
               child: Text('Confirmer'),
               onPressed: () {
-                Navigator.of(context).pop();
-                FirebaseFirestore.instance
-                    .collection("Users")
-                    .doc(cuurentUserID)
-                    .delete();
-                AuthService().signOut();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                try {
+                  FirebaseAuth.instance.currentUser!.delete();
+
+                  Navigator.of(context).pop();
+                  // FirebaseFirestore.instance
+                  //     .collection("Users")
+                  //     .doc(cuurentUserID)
+                  //     .delete();
+                  AuthService().signOut();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'requires-recent-login') {
+                    print(
+                        'The user must reauthenticate before this operation can be executed.');
+                  }
+                }
               },
             ),
             TextButton(

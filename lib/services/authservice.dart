@@ -67,9 +67,9 @@ class AuthService {
       double? balanceGeneral,
       double? depenses,
       double? revenus,
-      String? firstname,
-      String? lastname,
-      String? username}) async {
+      String firstname = " ",
+      String lastname = " ",
+      String username = " "}) async {
     return await userCollection.doc(uid).set({
       "phoneNumber": phoneNumber,
       "BalanceGeneral": balanceGeneral,
