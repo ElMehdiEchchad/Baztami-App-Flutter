@@ -373,6 +373,17 @@ class _Configuration2State extends State<Configuration2> {
                 }),
           ),
 
+          SizedBox(
+              child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Center(
+              child: Text(
+                'Pour mettre à jour vos informations, saisissez les dans les champs convenables, et appuyez sur le boutton à droite pour enregistrer!',
+                style: TextStyle(fontSize: 15.0),
+              ),
+            ),
+          )),
+
           /* Container(
             margin: EdgeInsets.all(4.0),
             padding: EdgeInsets.all(5.0),
