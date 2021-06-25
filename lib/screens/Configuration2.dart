@@ -21,6 +21,9 @@ class _Configuration2State extends State<Configuration2> {
   TextEditingController usernameController = new TextEditingController();
   TextEditingController firstNameController = new TextEditingController();
   TextEditingController lastNameController = new TextEditingController();
+  String updatedUsername = "";
+  String updatedFirstName = "";
+  String updatedLastName = "";
 
   void getdata() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
@@ -122,12 +125,23 @@ class _Configuration2State extends State<Configuration2> {
                         "Mon Nom d'utilisateur",
                         style: TextStyle(color: Colors.lightBlue[200]),
                       ),
-                      subtitle: Text(
-                        "Pas de valeur assignée",
+                      subtitle: TextField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          hintText: "Saisissez votre nom d'utilisateur",
+                          hintStyle:
+                              TextStyle(color: Colors.white, fontSize: 14.0),
+                        ),
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          updatedUsername = usernameController.text;
+                          FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(cuurentUserID)
+                              .update({"username": updatedUsername});
+                        },
                         icon: Icon(
                           Icons.edit,
                           color: Colors.white,
@@ -147,6 +161,7 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.lightBlue[200]),
                       ),
                       subtitle: TextField(
+                        controller: usernameController,
                         decoration: InputDecoration(
                           hintText: (snapshot.data!)["username"],
                           hintStyle:
@@ -155,7 +170,13 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          updatedUsername = usernameController.text;
+                          FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(cuurentUserID)
+                              .update({"username": updatedUsername});
+                        },
                         icon: Icon(
                           Icons.save,
                           color: Colors.white,
@@ -201,6 +222,7 @@ class _Configuration2State extends State<Configuration2> {
                           style: TextStyle(color: Colors.lightBlue[200]),
                         ),
                         subtitle: TextField(
+                          controller: firstNameController,
                           decoration: InputDecoration(
                             hintText: "Saisisez votre prénom",
                             hintStyle:
@@ -209,7 +231,13 @@ class _Configuration2State extends State<Configuration2> {
                           style: TextStyle(color: Colors.white, fontSize: 18.0),
                         ),
                         trailing: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              updatedFirstName = firstNameController.text;
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(cuurentUserID)
+                                  .update({"firstname": updatedFirstName});
+                            },
                             icon: Icon(
                               Icons.edit,
                               color: Colors.white,
@@ -227,6 +255,7 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.lightBlue[200]),
                       ),
                       subtitle: TextField(
+                        controller: firstNameController,
                         decoration: InputDecoration(
                           hintText: (snapshot.data!)["firstname"],
                           hintStyle:
@@ -235,7 +264,15 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          updatedFirstName = firstNameController.text;
+                          // print(firstNameController.text); good
+                          // print(updatedFirstName); good
+                          FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(cuurentUserID)
+                              .update({"firstname": updatedFirstName});
+                        },
                         icon: Icon(
                           Icons.save,
                           color: Colors.white,
@@ -276,6 +313,7 @@ class _Configuration2State extends State<Configuration2> {
                           style: TextStyle(color: Colors.lightBlue[200]),
                         ),
                         subtitle: TextField(
+                          controller: lastNameController,
                           decoration: InputDecoration(
                             hintText: "Saisisez votre nom",
                             hintStyle:
@@ -284,7 +322,13 @@ class _Configuration2State extends State<Configuration2> {
                           style: TextStyle(color: Colors.white, fontSize: 18.0),
                         ),
                         trailing: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              updatedLastName = lastNameController.text;
+                              FirebaseFirestore.instance
+                                  .collection("Users")
+                                  .doc(cuurentUserID)
+                                  .update({"lastname": updatedLastName});
+                            },
                             icon: Icon(
                               Icons.edit,
                               color: Colors.white,
@@ -302,6 +346,7 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.lightBlue[200]),
                       ),
                       subtitle: TextField(
+                        controller: lastNameController,
                         decoration: InputDecoration(
                           hintText: (snapshot.data!)["lastname"],
                           hintStyle:
@@ -310,7 +355,13 @@ class _Configuration2State extends State<Configuration2> {
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          updatedLastName = lastNameController.text;
+                          FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(cuurentUserID)
+                              .update({"lastname": updatedLastName});
+                        },
                         icon: Icon(
                           Icons.save,
                           color: Colors.white,
