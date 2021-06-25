@@ -149,7 +149,6 @@ class _YsalefScreenState extends State<YsalefScreen> {
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
                   "amount":total.toString(),
                 });
-
                 int entree =0;
                 int sortie =0;
 
@@ -167,6 +166,9 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   "entrée":entree,
                   "sortie" :sortie
                 });
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
+                      );
                 },
               child: Text(
                     "VALIDER",

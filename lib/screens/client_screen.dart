@@ -98,11 +98,19 @@ class _ClientScreenState extends State<ClientScreen> {
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                                     if (!snapshot.hasData)
                                       return Center(child: new CircularProgressIndicator());
-                                            return Text(snapshot.data!['amount'] + " DH", style: TextStyle(
-                                                  color: Palette.redColor,
-                                                  fontSize: 42,
-                                                  fontWeight: FontWeight.w600,
-                                              ),);
+                                            if(snapshot.data!["isSalaf"]==true){
+                                                return Text("- "+snapshot.data!['amount'] + " DH", style: TextStyle(
+                                                      color: Palette.redColor,
+                                                      fontSize: 42,
+                                                      fontWeight: FontWeight.w600,
+                                                  ),);}
+                                              else{
+                                                return Text("+ "+snapshot.data!['amount'] + " DH", style: TextStyle(
+                                                      color: Palette.greenColor,
+                                                      fontSize: 42,
+                                                      fontWeight: FontWeight.w600,
+                                                  ),);
+                                              }
                             }),   
                       ),
                       Row(
@@ -256,7 +264,7 @@ class _ClientHistoryState extends State<ClientHistory> {
                         {
                         return  CustomListItem(
                           date: (snapshot.data!).docs[index]["date"],
-                          description: "to add",
+                          description: "",
                           isDepense: (snapshot.data!).docs[index]["isSalaf"],
                           amount: double.parse((snapshot.data!).docs[index]["amount"]),
                   );

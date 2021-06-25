@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'client_screen.dart';
+import 'credit_screen.dart';
 
 
 class EditClient extends StatefulWidget {
@@ -16,7 +17,12 @@ class EditClient extends StatefulWidget {
 class _EditClientState extends State<EditClient> {
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final String clientid;
+  TextEditingController name = new TextEditingController() ;
+  TextEditingController phonenumber = new TextEditingController() ;
   _EditClientState(this.clientid);
+
+  final _formKeyName = GlobalKey<FormState>();
+  final _formKeyPhone = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class _EditClientState extends State<EditClient> {
                   IconButton(
                     onPressed: () {
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: "23,")),
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid)),
                       );
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
@@ -74,13 +80,19 @@ class _EditClientState extends State<EditClient> {
                                     return Container(
                                           height: 50,
                                           child: TextFormField(
-                                                initialValue: snapshot.data!["name"],
+                                                key: _formKeyName,
+                                                controller: name,
                                                 decoration: InputDecoration(
+                                                  hintText: snapshot.data!["name"],
                                                   border: OutlineInputBorder(
                                                     borderRadius: BorderRadius.all(
-                                                                  Radius.circular(15.0))
+                                                                  Radius.circular(15.0)),
                                                   ),
                                                   ),
+                                                  validator: (value) {
+                                                    if (value == null || value.isEmpty) {
+                                                      return 'This field should not be empty';
+                                                    }}
                                       ),
                                         );
                }),
@@ -100,21 +112,36 @@ class _EditClientState extends State<EditClient> {
                                     return Container(
                                           height: 50,
                                           child: TextFormField(
-                                                initialValue: snapshot.data!["phonenumber"],
+                                                key: _formKeyPhone,
+                                                controller: phonenumber,
                                                 keyboardType: TextInputType.phone,
                                                 decoration: InputDecoration(
+                                                  hintText: snapshot.data!["phonenumber"],
                                                   border: OutlineInputBorder(
                                                     borderRadius: BorderRadius.all(
                                                                   Radius.circular(15.0))
                                                   ),
                                                   ),
+                                                  validator: (value) {
+                                                    if (value == null || value.isEmpty) {
+                                                      return 'This field should not be empty';
+                                                    }}
                                       ),
                                         );
                }),
                ],),
             ),
             SizedBox(height: 60),
-            ElevatedButton(onPressed: () {}, 
+            ElevatedButton(onPressed: () async{
+              await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
+                  "name": name.text,
+                  "phonenumber": phonenumber.text,
+                });
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
+                      );
+              
+            }, 
               child: Text(
                     "VALIDER",
                     style: TextStyle(
@@ -132,7 +159,12 @@ class _EditClientState extends State<EditClient> {
                     primary: Palette.primaryLightColor,
                   ),),
             SizedBox(height: 10),
-            ElevatedButton(onPressed: () {}, 
+            ElevatedButton(onPressed: () async{
+              Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CreditScreen()),
+              );
+              await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).delete();                 
+            }, 
               child: Text(
                     "SUPPRIMER",
                     style: TextStyle(

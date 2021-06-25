@@ -152,7 +152,6 @@ class _YredScreenState extends State<YredScreen> {
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).update({
                   "amount":total.toString(),
                 });
-
                 int entree =0;
                 int sortie =0;
 
@@ -170,12 +169,10 @@ class _YredScreenState extends State<YredScreen> {
                     "entrée":entree,
                     "sortie" :sortie
                   });
-
-
-
-
-
-                print("Omayma"+amount.toString());},
+                Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
+                      );
+                  },
               child: Text(
                     "VALIDER",
                     style: TextStyle(
