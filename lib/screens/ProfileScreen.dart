@@ -1,4 +1,4 @@
-import 'package:baztami_app_flutter/screens/Configuration.dart';
+import 'package:baztami_app_flutter/screens/Configuration2.dart';
 import 'package:baztami_app_flutter/screens/MyInfo.dart';
 import 'package:baztami_app_flutter/screens/NousContacter.dart';
 import 'package:baztami_app_flutter/screens/credit_screen.dart';
@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Configuration()))
+                              builder: (context) => Configuration2()))
                     },
                   ),
                 ),

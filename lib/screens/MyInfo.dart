@@ -1,6 +1,6 @@
 import 'package:baztami_app_flutter/config/config.dart';
 import 'package:baztami_app_flutter/data/firebase_wallets_repository.dart';
-import 'package:baztami_app_flutter/screens/Configuration.dart';
+import 'package:baztami_app_flutter/screens/Configuration2.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,7 +177,7 @@ class _MyInfoState extends State<MyInfo> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Configuration()))
+                                  builder: (context) => Configuration2()))
                         },
                     icon: Icon(Icons.settings),
                     label: Text(
