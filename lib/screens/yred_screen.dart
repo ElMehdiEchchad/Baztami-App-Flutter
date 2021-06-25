@@ -18,8 +18,10 @@ class _YredScreenState extends State<YredScreen> {
   _YredScreenState(this.clientid);
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final  userCollection = FirebaseFirestore.instance.collection("Users");
-  late String _date ='Select date ..';
+  late String _date =new DateFormat.yMMMMd("en_US").format(new DateTime.now());
   TextEditingController amount = new TextEditingController() ;
+  final _formKey = GlobalKey<FormState>();
+
 
   Future _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -32,14 +34,13 @@ class _YredScreenState extends State<YredScreen> {
   });
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
+        child: Form(
+          key: _formKey,
         child: Column(
           children: [
             Padding(
@@ -48,9 +49,7 @@ class _YredScreenState extends State<YredScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid:clientid)),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
@@ -81,6 +80,7 @@ class _YredScreenState extends State<YredScreen> {
                           height: 50,
                           child: TextFormField(
                             controller: TextEditingController()..text = _date,
+                            enabled: false,
                             decoration: InputDecoration(
                               hintText: "Date ..",
                               border: OutlineInputBorder(
@@ -88,7 +88,10 @@ class _YredScreenState extends State<YredScreen> {
                                     Radius.circular(15.0)),
                               ),
                             ),
-
+                            validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                          return 'This field should not be empty';
+                                }}
                           ),
                         ),
                       ),
@@ -128,7 +131,11 @@ class _YredScreenState extends State<YredScreen> {
                   fontSize: 40,
                   fontWeight: FontWeight.w700,
                 ),
-              )
+              ),
+              validator: (value) {
+                    if (value == null || value.isEmpty) {
+                          return 'This field should not be empty';
+               }}
             ),),
             Text("DH", style: TextStyle(
               color: Palette.primaryLightColor,
@@ -139,7 +146,9 @@ class _YredScreenState extends State<YredScreen> {
        ),),
        SizedBox(height: 60),
             ElevatedButton(onPressed: () async{
-
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Processing Data')));
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").doc().set({
                   "date": _date,
                   "amount":amount.text,
@@ -169,10 +178,8 @@ class _YredScreenState extends State<YredScreen> {
                     "entrée":entree,
                     "sortie" :sortie
                   });
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
-                  },
+                  Navigator.pop(context);
+                  } },
               child: Text(
                     "VALIDER",
                     style: TextStyle(
@@ -191,9 +198,7 @@ class _YredScreenState extends State<YredScreen> {
                   ),),
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid)),
-                      );}, 
+                    Navigator.pop(context);}, 
               child: Text(
                     "ANNULER",
                     style: TextStyle(
@@ -210,7 +215,7 @@ class _YredScreenState extends State<YredScreen> {
                     ),
                     primary: Palette.redColor,
                   ),)
-      ],),), );
+      ],),), ), );
      
   }
 }

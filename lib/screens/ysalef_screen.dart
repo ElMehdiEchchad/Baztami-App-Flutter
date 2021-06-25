@@ -19,8 +19,10 @@ class _YsalefScreenState extends State<YsalefScreen> {
 
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final  userCollection = FirebaseFirestore.instance.collection("Users");
-  late String _date ='Select date ..';
+  late String _date =new DateFormat.yMMMMd("en_US").format(new DateTime.now());
   TextEditingController amount = new TextEditingController() ;
+  final _formKey = GlobalKey<FormState>();
+
 
   Future _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -36,7 +38,10 @@ class _YsalefScreenState extends State<YsalefScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
+        child: Form(
+          key: _formKey,
         child: Column(
           children: [
             Padding(
@@ -45,9 +50,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
+                      Navigator.pop(context);
                     },
                     icon: Image.asset("assets/images/retourblue.png"),
                   ),
@@ -78,6 +81,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                           height: 50,
                           child: TextFormField(
                             controller: TextEditingController()..text = _date,
+                            enabled: false,
                             decoration: InputDecoration(
                               hintText: "Date ..",
                               border: OutlineInputBorder(
@@ -85,6 +89,10 @@ class _YsalefScreenState extends State<YsalefScreen> {
                                     Radius.circular(15.0)),
                               ),
                             ),
+                            validator: (value) {
+                                   if (value == null || value.isEmpty) {
+                                        return 'This field should not be empty';
+                            }}
 
                           ),
                         ),
@@ -125,7 +133,11 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   fontSize: 40,
                   fontWeight: FontWeight.w700,
                 ),
-              )
+              ),
+              validator: (value) {
+                    if (value == null || value.isEmpty) {
+                            return 'This field should not be empty';
+                    }}
             ),),
             Text("DH", style: TextStyle(
               color: Palette.primaryLightColor,
@@ -137,6 +149,9 @@ class _YsalefScreenState extends State<YsalefScreen> {
        SizedBox(height: 60),
             ElevatedButton(onPressed: () 
               async{
+                if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Processing Data')));
                 await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).collection("Transactions").doc().set({
                   "date": _date,
                   "amount":amount.text,
@@ -166,10 +181,8 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   "entrée":entree,
                   "sortie" :sortie
                 });
-                Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );
-                },
+                Navigator.pop(context);
+                } },
               child: Text(
                     "VALIDER",
                     style: TextStyle(
@@ -188,9 +201,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                   ),),
             SizedBox(height: 10),
             ElevatedButton(onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ClientScreen(clientid: clientid,)),
-                      );}, 
+                   Navigator.pop(context);}, 
               child: Text(
                     "ANNULER",
                     style: TextStyle(
@@ -207,7 +218,7 @@ class _YsalefScreenState extends State<YsalefScreen> {
                     ),
                     primary: Palette.redColor,
                   ),)
-      ],),), );
+      ],),),), );
      
   }
 }
