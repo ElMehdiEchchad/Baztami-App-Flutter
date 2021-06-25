@@ -1,12 +1,9 @@
 import 'package:baztami_app_flutter/screens/Configuration2.dart';
 import 'package:baztami_app_flutter/screens/MyInfo.dart';
 import 'package:baztami_app_flutter/screens/NousContacter.dart';
-import 'package:baztami_app_flutter/screens/credit_screen.dart';
 import 'package:baztami_app_flutter/services/authservice.dart';
 import 'package:flutter/material.dart';
-import 'MainScreen.dart';
 import 'package:baztami_app_flutter/config/config.dart';
-import 'nav_bottom_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

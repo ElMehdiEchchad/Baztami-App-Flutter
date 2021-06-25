@@ -213,6 +213,48 @@ class _Configuration2State extends State<Configuration2> {
                   "Supprimer mon compte",
                 )),
           ),
+          SizedBox(
+            height: 40,
+          ),
+
+          //This is for test purposes
+          /* Container(
+            margin: EdgeInsets.all(4.0),
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Palette.primaryColor, Palette.primaryHeadingColor]),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: ListTile(
+              leading: Icon(Icons.phone_in_talk),
+              title: Text("Test"),
+
+              
+
+              subtitle: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(cuurentUserID)
+                      .snapshots(),
+                 
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (!(snapshot).hasData) return Text('');
+                    return Text(
+                      (snapshot.data)["lastname"].toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    );
+                  }),
+
+              trailing: Icon(
+                Icons.edit,
+                color: Colors.lightBlueAccent,
+              ),
+            ),
+          ),
+          */
         ]),
       ),
     );
@@ -260,20 +302,3 @@ class _Configuration2State extends State<Configuration2> {
     );
   }
 }
-        
-      //using containers for data is better for the state
-              
-      /*Column(children: [
-        StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection("Users")
-                .doc(cuurentUserID)
-                .snapshots(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData)
-                return Center(child: new CircularProgressIndicator());
-              return ListTile(
-                  title: Text((snapshot.data!)["username"].toString()));
-            }),
-      ]),*/
-  

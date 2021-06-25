@@ -66,12 +66,18 @@ class AuthService {
       String? phoneNumber,
       double? balanceGeneral,
       double? depenses,
-      double? revenus}) async {
+      double? revenus,
+      String? firstname,
+      String? lastname,
+      String? username}) async {
     return await userCollection.doc(uid).set({
       "phoneNumber": phoneNumber,
       "BalanceGeneral": balanceGeneral,
       "Depenses": depenses,
       "Revenues": revenus,
+      "username": username,
+      "firstname": firstname,
+      "lastname": lastname
     });
   }
 }
