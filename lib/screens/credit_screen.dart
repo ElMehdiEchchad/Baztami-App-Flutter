@@ -135,15 +135,13 @@ class _CreditScreenState extends State<CreditScreen> {
                           if (!snapshot.hasData)
                             return Center(
                                 child: new CircularProgressIndicator());
-                          //if(snapshot.data.documents.length==0) return
-                          /*Stack(
+                     /*     if((snapshot.data!).docs.length==0) return
+                          Stack(
                    fit: StackFit.expand, // StackFit.expand fixes the issue
                   children: <Widget>[
                         Center(
                      child: Image.asset(
-                     'assets/no_order.png',
-                       width: 300,
-                        height: 300,
+                     'assets/images/no-clients.png',
                        ),
                          ),
                         ],
@@ -182,85 +180,6 @@ class _CreditScreenState extends State<CreditScreen> {
   }
 }
 
-class creditcard extends StatelessWidget {
-  const creditcard(
-      {Key? key, required this.name, required this.date, required this.amount})
-      : super(key: key);
-
-  final String name;
-  final String date;
-  final String amount;
-  @override
-  Widget build(BuildContext context) {
-    final String userid = FirebaseAuth.instance.currentUser!.uid;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    shape: BoxShape.circle),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      UrlLauncher.launch("tel://0642926547");
-                    },
-                    color: Palette.primaryLightColor,
-                    icon: const Icon(Icons.call),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      date,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black.withOpacity(0.5),
-                          fontWeight: FontWeight.w200),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      amount,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.red,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-        Divider()
-      ],
-    );
-  }
-}
 
 class topcards extends StatelessWidget {
   const topcards({Key? key, required this.title, required this.sum})

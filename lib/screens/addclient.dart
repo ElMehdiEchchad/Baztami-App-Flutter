@@ -20,12 +20,13 @@ class _AddClientState extends State<AddClient> {
   bool isSalaf =true;
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
   final  userCollection = FirebaseFirestore.instance.collection("Users");
-  TextEditingController name = new TextEditingController() ;
-  TextEditingController amount = new TextEditingController() ;
-
+  TextEditingController name = new TextEditingController(text: '') ;
+  TextEditingController amount = new TextEditingController(text: '0') ;
+  bool validate =true ;
   _handleInput(PhoneNumber value) {
     setState(() {
       phoneNumber = value;
+      if(value!=null) validate=false ;
     });
   }
 
@@ -50,33 +51,62 @@ class _AddClientState extends State<AddClient> {
         actions: [
           new FlatButton(
               onPressed: () async{
-                if(_selectedLocation !="Give") isSalaf =false ;
-                await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc().set({
-                  "date": _date,
-                  "phonenumber":phoneNumber.toString(),
-                  "name":name.text,
-                  "amount":amount.text,
-                  "isSalaf":isSalaf
-                });
-                int entree =0;
-                int sortie =0;
+                print("salma"+amount.text+"salma"+name.text);
+                if(amount.text =='0' || name.text ==''|| validate) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      // return object of type Dialog
+                      return AlertDialog(
+                        title: new Text("Avertissement"),
+                        content: new Text("Entrez tous les champs avant d'enregister "),
+                        actions: <Widget>[
+                          // usually buttons at the bottom of the dialog
+                          new FlatButton(
+                            child: new Text("Fermer"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );},
+                  );
+                }else {
+                  if (_selectedLocation != "Give") isSalaf = false;
+                  await FirebaseFirestore.instance.collection('Users').doc(
+                      userid).collection("Clients").doc().set({
+                    "date": _date,
+                    "phonenumber": phoneNumber.toString(),
+                    "name": name.text,
+                    "amount": amount.text,
+                    "isSalaf": isSalaf
+                  });
+                  int entree = 0;
+                  int sortie = 0;
 
-                QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Users').doc(userid).collection('Clients').get();
-                final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-                setState(() {
-                  for (var client in allData) {
-                    if((client as Map)["isSalaf"] ==true) sortie+=int.parse((client as Map)["amount"]) ;
-                    else entree+=int.parse((client as Map)["amount"]) ;
+               QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                      .collection('Users').doc(userid)
+                      .collection('Clients')
+                      .get();
+                  final allData = querySnapshot.docs.map((doc) => doc.data())
+                      .toList();
+                  setState(() {
+                    for (var client in allData) {
+                      if ((client as Map)["isSalaf"] == true)
+                        sortie += int.parse((client as Map)["amount"]);
+                      else
+                        entree += int.parse((client as Map)["amount"]);
+                    }
+                  });
 
-                  }
-                });
+                  await FirebaseFirestore.instance.collection("Users").doc(
+                      userid).update({
+                    "entrée": entree,
+                    "sortie": sortie
+                  });
 
-                await FirebaseFirestore.instance.collection("Users").doc(userid).update({
-                  "entrée":entree,
-                  "sortie" :sortie
-                });
-
-                Navigator.pop(context);
+                  Navigator.pop(context);
+                }
               },
               child: new Text('SAVE',
                   style: Theme
