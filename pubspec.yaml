@@ -38,12 +38,16 @@ dependencies:
   equatable: ^2.0.3
   uuid: ^3.0.4
   shimmer: ^2.0.0
+  flutter_launcher_icons: ^0.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
-
+flutter_icons:
+  image_path: "assets/baztami_icon.png"
+  android: true
+  ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -70,6 +74,8 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
+    
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
