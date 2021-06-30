@@ -534,13 +534,13 @@ class _Configuration2State extends State<Configuration2> {
               child: Text('Confirmer'),
               onPressed: () {
                 String currentid = FirebaseAuth.instance.currentUser!.uid;
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
                 FirebaseFirestore.instance
                     .collection("Users")
                     .doc(currentid)
                     .delete()
-                    .then((value) => AuthService().signOut())
-                    .then((value) => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage())));
+                    .then((value) => AuthService().signOut());
 
                 // Navigator.pop(context);
               },
