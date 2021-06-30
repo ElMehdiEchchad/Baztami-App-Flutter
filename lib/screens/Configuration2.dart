@@ -537,11 +537,10 @@ class _Configuration2State extends State<Configuration2> {
                 FirebaseFirestore.instance
                     .collection("Users")
                     .doc(currentid)
-                    .delete();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                    .delete()
+                    .then((value) => AuthService().signOut());
 
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
             ),
             TextButton(

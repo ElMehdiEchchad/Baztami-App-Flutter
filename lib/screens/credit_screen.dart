@@ -18,8 +18,8 @@ class CreditScreen extends StatefulWidget {
 
 class _CreditScreenState extends State<CreditScreen> {
   final String userid = FirebaseAuth.instance.currentUser!.uid;
-  int entree = 0;
-  int sortie = 0;
+  double entree = 0;
+  double sortie = 0;
 
   void getdata() async {
     DocumentSnapshot variable =
@@ -135,7 +135,7 @@ class _CreditScreenState extends State<CreditScreen> {
                           if (!snapshot.hasData)
                             return Center(
                                 child: new CircularProgressIndicator());
-                     /*     if((snapshot.data!).docs.length==0) return
+                          /*     if((snapshot.data!).docs.length==0) return
                           Stack(
                    fit: StackFit.expand, // StackFit.expand fixes the issue
                   children: <Widget>[
@@ -179,7 +179,6 @@ class _CreditScreenState extends State<CreditScreen> {
     );
   }
 }
-
 
 class topcards extends StatelessWidget {
   const topcards({Key? key, required this.title, required this.sum})
