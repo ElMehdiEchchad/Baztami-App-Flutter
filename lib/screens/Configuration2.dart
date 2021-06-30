@@ -538,7 +538,9 @@ class _Configuration2State extends State<Configuration2> {
                     .collection("Users")
                     .doc(currentid)
                     .delete()
-                    .then((value) => AuthService().signOut());
+                    .then((value) => AuthService().signOut())
+                    .then((value) => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage())));
 
                 // Navigator.pop(context);
               },
