@@ -153,14 +153,23 @@ class _CreditScreenState extends State<CreditScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
+                                      Navigator.of(context).push(new MaterialPageRoute<Null>(
+                                        builder: (BuildContext context) {
+                                          return ClientScreen(
+                                              clientid: (snapshot.data!)
+                                                  .docs[index]
+                                                  .id);
+                                        },
+                                        fullscreenDialog: true,));
+                                     /* Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ClientScreen(
                                                 clientid: (snapshot.data!)
                                                     .docs[index]
-                                                    .id)),
-                                      );
+                                                    .id)
+                                        ),
+                                      );*/
                                     },
                                     child: CustomListItem(
                                         date: (snapshot.data!).docs[index]

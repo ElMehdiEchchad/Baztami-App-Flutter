@@ -34,8 +34,34 @@ class _ClientScreenState extends State<ClientScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () {
+                    onPressed:() async  {
+
+                     /* int entree = 0;
+                      int sortie = 0;
+
+                      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                          .collection('Users').doc(userid)
+                          .collection('Clients')
+                          .get();
+                      final allData = querySnapshot.docs.map((doc) => doc.data())
+                          .toList();
+                      setState(() {
+                        for (var client in allData) {
+                          if ((client as Map)["isSalaf"] == true)
+                            sortie += int.parse((client as Map)["amount"]);
+                          else
+                            entree += int.parse((client as Map)["amount"]);
+                        }
+                      });
+
+                      await FirebaseFirestore.instance.collection("Users").doc(
+                          userid).update({
+                        "entrée": entree,
+                        "sortie": sortie
+                      });*/
+                      await FirebaseFirestore.instance.collection('Users').doc(userid).collection("Clients").doc(clientid).delete();
                       Navigator.pop(context);
+
                     },
                     icon: Image.asset("assets/images/retour.png"),
                   ),
@@ -63,13 +89,20 @@ class _ClientScreenState extends State<ClientScreen> {
                   Spacer(),
                   IconButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.of(context).push(new MaterialPageRoute<Null>(
+                          builder: (BuildContext context) {
+                        return EditClient(
+                          clientid: clientid,
+                        );
+                      },
+                      fullscreenDialog: true,));
+                      /*.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditClient(
                                   clientid: clientid,
                                 )),
-                      );
+                      );*/
                     },
                     icon: Image.asset("assets/images/editer.png"),
                   )
