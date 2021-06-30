@@ -70,8 +70,8 @@ class AuthService {
       String firstname = " ",
       String lastname = " ",
       String username = " ",
-      sortie = 0.0,
-      entree = 0.0}) async {
+      double sortie = 0.0,
+      double entree = 0.0}) async {
     return await userCollection.doc(uid).set({
       "phoneNumber": phoneNumber,
       "BalanceGeneral": balanceGeneral,
