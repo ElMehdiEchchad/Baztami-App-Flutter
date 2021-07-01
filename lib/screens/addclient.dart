@@ -14,8 +14,8 @@ class AddClient extends StatefulWidget {
 
 class _AddClientState extends State<AddClient> {
   PhoneNumber phoneNumber = PhoneNumber();
-  List<String> _locations = ['Give','Take']; // Option 2
-  String _selectedLocation ='Give'; // Option 2
+  List<String> _locations = ['Donner','Reçevoir']; // Option 2
+  String _selectedLocation ='Donner'; // Option 2
   late String _date =new DateFormat.yMMMMd("en_US").format(new DateTime.now());
   bool isSalaf =true;
   final String userid = FirebaseAuth.instance.currentUser!.uid ;
@@ -47,7 +47,7 @@ class _AddClientState extends State<AddClient> {
   Widget build(BuildContext context) {
     return  new Scaffold(
       appBar: new AppBar(
-        title: const Text('New client'),
+        title: const Text('Client'),
         actions: [
           new FlatButton(
               onPressed: () async{
@@ -72,7 +72,7 @@ class _AddClientState extends State<AddClient> {
                       );},
                   );
                 }else {
-                  if (_selectedLocation != "Give") isSalaf = false;
+                  if (_selectedLocation != "Donner") isSalaf = false;
                   await FirebaseFirestore.instance.collection('Users').doc(
                       userid).collection("Clients").doc().set({
                     "date": _date,
@@ -108,7 +108,7 @@ class _AddClientState extends State<AddClient> {
                   Navigator.pop(context);
                 }
               },
-              child: new Text('SAVE',
+              child: new Text('Enregistrer',
                   style: Theme
                       .of(context)
                       .textTheme

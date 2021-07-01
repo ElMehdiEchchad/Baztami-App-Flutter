@@ -18,8 +18,33 @@ class CreditScreen extends StatefulWidget {
 
 class _CreditScreenState extends State<CreditScreen> {
   final String userid = FirebaseAuth.instance.currentUser!.uid;
-  double entree = 0;
-  double sortie = 0;
+  int entree = 0;
+  int sortie = 0;
+
+  getuserdata() async {
+    int entree = 0;
+    int sortie = 0;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Users').doc(userid)
+        .collection('Clients')
+        .get();
+    final allData = querySnapshot.docs.map((doc) => doc.data())
+        .toList();
+    setState(() {
+      for (var client in allData) {
+        if ((client as Map)["isSalaf"] == true)
+          sortie += int.parse((client as Map)["amount"]);
+        else
+          entree += int.parse((client as Map)["amount"]);
+      }
+    });
+
+    await FirebaseFirestore.instance.collection("Users").doc(
+        userid).update({
+      "entrée": entree,
+      "sortie": sortie
+    });
+  }
 
   void getdata() async {
     DocumentSnapshot variable =
@@ -31,8 +56,11 @@ class _CreditScreenState extends State<CreditScreen> {
   }
 
   @override
-  void initState() {
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
     getdata();
+    getuserdata();
   }
 
   @override
@@ -153,6 +181,7 @@ class _CreditScreenState extends State<CreditScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                     onTap: () {
+                                    //  getuserdata();
                                       Navigator.of(context).push(new MaterialPageRoute<Null>(
                                         builder: (BuildContext context) {
                                           return ClientScreen(
